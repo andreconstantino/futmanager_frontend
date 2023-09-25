@@ -28,7 +28,7 @@ export default function LoginPage(){
           post('http://127.0.0.1:8000/oauth/token', body).then((response) => {
             setLoginData(response.data)
             setHeader(response.data.token_type, response.data.access_token)
-            navigate('/register');
+            navigate('/home');
           }).catch ((error) => {
             console.log(error)
             alert('deu ruim')
@@ -80,6 +80,4 @@ export default function LoginPage(){
         </div>  
        </>    
     )
-
-    
 }
