@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import {get, post, put, doDelete, setHeader} from "../services/index"
+import {get, post, put, doDelete, setHeader} from "../services/http"
 
 function Register(){
     const [loginData, setLoginData] = useState([]);

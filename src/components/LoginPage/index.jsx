@@ -5,46 +5,57 @@ import Logo from './Logo';
 import { Link, useNavigate } from 'react-router-dom';
 import { Roboto } from '../../styles/Styles';
 import { useState } from 'react';
-import {get, post, put, doDelete, setHeader} from "../../services/index"
-import { ChangeEvent } from 'react';
+import {get, post, put, doDelete, setHeader} from "../../services/http"
+import FutmanagerSnackbar from '../FutmanagerSnackbar';
+import { useEffect } from 'react';
 
 export default function LoginPage(){
-
-    const [loginData, setLoginData] = useState([]);
-    const [username, setUserName] = useState([]);
-    const [password, setPassword] = useState([]);
+    const [username, setUserName] = useState([""]);
+    const [password, setPassword] = useState([""]);
+    const [erro, setErro] = useState(false);
+    const [mensagemErro, setMensagemErro] = useState('');
+    const [snackOptions, setSnackOptions] = useState({ mensage: "Unknow", type: "error", open: false });
     const navigate = useNavigate();
 
     function login() {
-        if (username && password) {
-          var body = {
-            grant_type: 'password',
-            client_id:'9a1c065d-c561-429a-adc8-c0034567ef3c', 
-            client_secret:'R88Y3WdjaGf0KYZuez9TxvN70RwabYKK0iR9WR9i',
-            username: username, //futmanager@example.com
-            password: password //12345
-          }
-      
-          post('http://127.0.0.1:8000/oauth/token', body).then((response) => {
-            setLoginData(response.data)
-            setHeader(response.data.token_type, response.data.access_token)
-            navigate('/home');
-          }).catch ((error) => {
-            console.log(error)
-            alert('deu ruim')
-          });
+        if (username == ""){
+          setSnackOptions(prev => ({ mensage: "Preencha o E-mail para prosseguir", type: "warning", open: true }));
+        } else if (password == ""){
+          setSnackOptions(prev => ({ mensage: "Preencha a senha para prosseguir", type: "warning", open: true }));
         } else {
-          alert("deu ruim")
+          if (username && password) {
+            var body = {
+              grant_type: 'password',
+              client_id: '9a1c065d-c561-429a-adc8-c0034567ef3c',//import.meta.env.REACT_VITE_CLIENT_ID, 
+              client_secret: 'R88Y3WdjaGf0KYZuez9TxvN70RwabYKK0iR9WR9i',//import.meta.env.REACT_VITE_CLIENT_SECRET,
+              username: username, //futmanager@example.com
+              password: password //12345
+            }
+        
+            post('oauth/token', body).then((response) => {
+              navigate('/home');
+            }).catch ((error) => {
+              console.log(error)
+              setSnackOptions(prev => ({ mensage: "Não foi possivel realizar o seu login", type: "error", open: true }));
+            });
+          }
         }
+        
     }
 
-    const buscarUserName = (event) => {
-        setUserName(event.target.value);
-    }
+    const closeSnackBar = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setSnackOptions(prev => ({ ...prev, open: false }));
+    };
 
-    const buscarPassword = (event) => {
-        setPassword(event.target.value);
-    }
+    useEffect(() => {
+      if (erro) {
+          setErro(false)
+          setMensagemErro('')
+      }
+    }, [username, password]);
 
     return(
        <>
@@ -53,23 +64,23 @@ export default function LoginPage(){
             <Roboto>
             <div className=' w-80'>
                 <TextField 
-                  id="username" 
-                  value={username} 
-                  onChange={buscarUserName}
+                  required
+                  id="standard-required"
+                  onChange={(e) => setUserName(e.target.value)}
+                  error={erro}
                   label="E-mail" 
                   variant="outlined" 
                   style={{margin:'10px', width:'300px'}}
-                  required
                 />
                 <TextField 
-                  id="password" 
+                  required
+                  id="standard-required"
                   type='password'
-                  value={password} 
-                  onChange={buscarPassword}
+                  onChange={(e) => setPassword(e.target.value)}
+                  error={erro}
                   label="Senha" 
                   variant="outlined" 
                   style={{margin:'10px', width:'300px'}} 
-                  required
                 />
             </div>
             <div className='flex flex-row mb-12'> 
@@ -77,6 +88,11 @@ export default function LoginPage(){
             </div>    
                 <Button onClick={login} variant="contained" style={{margin:'10px', width:'300px', backgroundColor:'rgb(0, 85, 150)'}}>Entrar</Button>
             </Roboto> 
+            <FutmanagerSnackbar
+              mensage={snackOptions.mensage}
+              type={snackOptions.type}
+              open={snackOptions.open}
+              handleClose={closeSnackBar} />
         </div>  
        </>    
     )
