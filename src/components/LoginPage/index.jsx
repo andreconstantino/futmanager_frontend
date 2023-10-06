@@ -26,8 +26,8 @@ export default function LoginPage(){
           if (username && password) {
             var body = {
               grant_type: 'password',
-              client_id: '9a1c065d-c561-429a-adc8-c0034567ef3c',//import.meta.env.REACT_VITE_CLIENT_ID, 
-              client_secret: 'R88Y3WdjaGf0KYZuez9TxvN70RwabYKK0iR9WR9i',//import.meta.env.REACT_VITE_CLIENT_SECRET,
+              client_id: import.meta.env.VITE_CLIENT_ID, 
+              client_secret: import.meta.env.VITE_CLIENT_SECRET,
               username: username, //futmanager@example.com
               password: password //12345
             }
