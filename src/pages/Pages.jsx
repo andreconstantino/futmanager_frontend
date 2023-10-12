@@ -1,7 +1,7 @@
 import {Navbar} from "../components/Navbar"
 import Header from "../components/Header"
-import Section from "../components/Section"
 import { useState } from "react";
+import Content from "../components/Content";
 
 export default function Pages() {
 
@@ -13,7 +13,7 @@ export default function Pages() {
                 <Navbar isVisible = {isVisible} />
             <div className="flex-1">
                 <Header onClick={() => setIsVisible((prev) => !prev)} />
-                <Section />    
+                <Content/> 
             </div>  
             </div> 
         </>
