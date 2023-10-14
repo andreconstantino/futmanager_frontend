@@ -8,7 +8,7 @@ export default function NavbarItens(props){
 
     return (
         <li className="list-none">
-            <ButtonBase className={`text-white hover:bg-blue-fut-paz-900 p-3 mb-2 ${location.pathname == caminho ? 'bg-blue-fut-paz-900' : 'text-gray-400'}`}
+            <ButtonBase className={`hover:bg-blue-fut-paz-900 p-3 mb-2 ${location.pathname == caminho ? 'bg-blue-fut-paz-900 text-white' : 'text-gray-400'}`}
                 sx={{
                 alignItems: 'center',
                 borderRadius: 1,
@@ -21,7 +21,7 @@ export default function NavbarItens(props){
                 onClick={()=> {navegacao(caminho)}}
             > 
             {icone && (
-            <Box component="span" className={`text-red-500 ${!isVisible ? 'p-2' : ''} ${location.pathname == caminho ? 'bg-blue-fut-paz-900' : 'text-gray-400'}`}
+            <Box component="span" className={`${!isVisible ? 'p-2' : ''} ${location.pathname == caminho ? 'bg-blue-fut-paz-900 text-red-500' : 'text-gray-400'}`}
             sx={{
                 alignItems: 'center',
                 color: 'neutral.400',

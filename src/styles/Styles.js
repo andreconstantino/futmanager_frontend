@@ -17,5 +17,9 @@ align-items: center;
 `
 export const Roboto = styled.div`
 font-family:'Roboto'; 
-
+`
+export const Banner = styled.div`
+background-image: url('./src/assets/background-soccer-2.png');
+width: 100px;
+height: 500px;
 `

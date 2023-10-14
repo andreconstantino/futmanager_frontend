@@ -20,13 +20,12 @@ export default function User() {
     setAnchorEl(null);
   };
 
-  // const usuario = getUser();
-  // console.log(usuario)
+  const usuario = getUser();
 
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Typography sx={{ minWidth: 100 }}>Nome do Usuário</Typography>
+        <Typography sx={{ minWidth: 100 }}>{usuario.nm_usuario}</Typography>
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}

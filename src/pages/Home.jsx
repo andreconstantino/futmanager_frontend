@@ -4,7 +4,7 @@ export default function Home(){
     return(
         <>
         <div className="flex relative"> 
-            <Section />
+            
         </div> 
         </>
     )

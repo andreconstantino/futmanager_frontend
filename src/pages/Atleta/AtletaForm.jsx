@@ -7,7 +7,19 @@ import { get } from '../../services/http';
 export default function AtletaForm (props){
 
     const {titulo, createItem, id} = props
-    const [atleta, setAtleta] = useState({});
+    const [atleta, setAtleta] = useState({
+        nm_atletaCompleto: "", 
+        nm_apelido: "",
+        categoria_id: "",
+        dt_nascimento: "",
+        nu_idade: "",
+        tp_genero: "",
+        nu_cpf: "",
+        nu_rg: "",
+        nm_camiseta: "",
+        nu_camiseta: "",
+        nu_calcado: ""
+    });
     const [categoria, setCategoria] = useState([]);
 
     const handleSubmit = (event) => {
@@ -94,7 +106,7 @@ export default function AtletaForm (props){
                         margin="normal"
                     >
                         {categoria.map(cat => (
-                            <MenuItem value={cat.id}>{cat.nm_categoria}</MenuItem>
+                            <MenuItem key={cat.id} value={cat.id}>{cat.nm_categoria}</MenuItem>
                         ))}
                     </TextField>
                     </Grid>

@@ -4,7 +4,7 @@ import Register from './src/pages/Register';
 import Home from './src/pages/Home';
 import Pages from './src/pages/Pages';
 import Atleta from './src/pages/Atleta/Atleta';
-import Perfil from './src/pages/Perfil';
+import Perfil from './src/pages/Perfil/Perfil';
 
 export default function MyRoute(){
     return(

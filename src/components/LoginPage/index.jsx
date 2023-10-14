@@ -4,9 +4,9 @@ import Logo from './Logo';
 import { Link, useNavigate } from 'react-router-dom';
 import { Roboto } from '../../styles/Styles';
 import { useState } from 'react';
-import {post} from "../../services/http"
+import {postLogin} from "../../services/http"
 import { useEffect } from 'react';
-import { setUser } from '../../services/storage';
+import { setToken } from '../../services/storage';
 
 export default function LoginPage(){
     const [username, setUserName] = useState([""]);
@@ -26,8 +26,9 @@ export default function LoginPage(){
           password: password //12345
         }
       
-        post('oauth/token', body).then((response) => {
-          setUser(response.data)
+        postLogin('oauth/token', body).then((response) => {
+          console.log(response.data)
+          setToken(response.data)
           navigate('/home');
         }).catch ((error) => {
           console.log(error)

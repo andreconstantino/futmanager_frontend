@@ -1,11 +1,25 @@
 import {Navbar} from "../components/Navbar"
 import Header from "../components/Header"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Content from "../components/Content";
+import { get } from "../services/http";
+import { setUser } from "../services/storage";
 
 export default function Pages() {
 
     const [isVisible, setIsVisible] = useState(true);
+
+    const me =() => {
+        get('api/me').then((response) => {
+          setUser(response.data);
+        }).catch ((error) => {
+          console.log(error)
+        })
+      }
+
+      useEffect(() => {
+        me()
+      }, []);
 
     return(
         <>
