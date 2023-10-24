@@ -121,6 +121,9 @@ export default function AtletaForm (props){
                             variant="outlined"
                             fullWidth
                             margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
                         />
                     </Grid>
                     <Grid item xs={4}>
