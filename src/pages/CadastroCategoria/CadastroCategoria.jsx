@@ -9,7 +9,7 @@ import { startTransition } from 'react';
 import { FutmanagerButton, FutmanagerTitles, FutmanagerSnackbar } from "../../components";
 import AddIcon from '@mui/icons-material/Add';
 
-export default function CadastroPerfil() {
+export default function CadastroCategoria() {
   const [perfilList, setPerfilList] = useState({});
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -17,9 +17,9 @@ export default function CadastroPerfil() {
   const [snackOptions, setSnackOptions] = useState({ mensage: "Unknow", type: "error", open: false });
   const navegacao = useNavigate()
 
-  const getPerfils = () => {
+  const getCategorias = () => {
     setLoad(true)
-    get(`api/perfil?page=${page + 1}&size=${pageSize}`).then((response) => {
+    get(`api/categoria?page=${page + 1}&size=${pageSize}`).then((response) => {
       setPerfilList(response.data)
       setLoad(false)
     }).catch((erro) => {
@@ -32,12 +32,12 @@ export default function CadastroPerfil() {
     });
   }
 
-  const deletarPerfil = (id) => {
+  const deletarCategoria = (id) => {
     setLoad(true)
-    del(`api/perfil/${id}`).then((response) => {
+    del(`api/categoria/${id}`).then((response) => {
       setLoad(false)
       setSnackOptions(prev => ({ mensage: "Perfil deletado com Sucesso", type: "success", open: true }));
-      getPerfils()
+      getCategorias()
     }).catch((erro) => {
       setSnackOptions(prev => ({
         mensage: erro?.response?.data?.message ? erro.response.data.message : erro?.message ? erro.message : 'Unespected error appears',
@@ -49,7 +49,7 @@ export default function CadastroPerfil() {
   }
 
   useEffect(() => {
-    getPerfils();
+    getCategorias();
   }, [page, pageSize]);
 
   const closeSnackBar = (event, reason) => {
@@ -61,13 +61,13 @@ export default function CadastroPerfil() {
 
   const createItem = () => {
     startTransition(() => {
-      navegacao(`/cadastroPerfilForm/0`)
+      navegacao(`/cadastroCategoriaForm/0`)
     });
   }
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 100 },
-    { field: 'perfil', headerName: 'Perfil', width: 300 },
+    { field: 'categoria', headerName: 'Categoria', width: 300 },
     { field: 'ativo', headerName: 'Ativo', width: 200 },
     { field: 'created_at', headerName: 'Data de Criação', width: 200 },
     { field: 'updated_at', headerName: 'Data de Atualização', width: 200 },
@@ -79,7 +79,7 @@ export default function CadastroPerfil() {
             color="primary"
             onClick={() => {
               startTransition(() => {
-                navegacao(`/cadastroPerfilForm/${params.row.id}`)
+                navegacao(`/cadastroCategoriaForm/${params.row.id}`)
               });
             }}>
             <EditIcon />
@@ -94,7 +94,7 @@ export default function CadastroPerfil() {
           <IconButton
             color="error"
             onClick={() => {
-              deletarPerfil(params.row.id);
+              deletarCategoria(params.row.id);
             }}>
             <DeleteIcon />
           </IconButton>
@@ -105,7 +105,7 @@ export default function CadastroPerfil() {
 
   return (
     <>
-      <FutmanagerTitles title={"Perfils Cadastrados"} />
+      <FutmanagerTitles title={"Categorias Cadastradas"} />
       <FutmanagerButton className='pl-6' color="primary" click={createItem} icon={<AddIcon />} />
       <DataGrid
         className='m-3'
