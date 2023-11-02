@@ -4,7 +4,7 @@ import Register from './src/pages/Register';
 import Home from './src/pages/Home';
 import Pages from './src/pages/Pages';
 import Atleta from './src/pages/Atleta/Atleta';
-import Perfil from './src/pages/Perfil/Perfil';
+import CadastroPerfil from './src/pages/CadastroPerfil/CadastroPerfil';
 
 export default function MyRoute(){
     return(
@@ -15,7 +15,7 @@ export default function MyRoute(){
                 <Route path="/register" Component={Register} />
                 <Route path="/home" Component={Home} />
                 <Route path="/atleta/:id" Component={Atleta} />
-                <Route path="/perfil" Component={Perfil} />
+                <Route path="/cadastroPerfil" Component={CadastroPerfil} />
             </Route>
         </Routes>
     )

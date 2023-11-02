@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 
 export const BackgroundSoccer = styled.div`
-background-image: url('./src/assets/background-soccer-2.png');
+background-image: url('./src/assets/campo_futpaz.jpg');
 width: 100%;
 height: 100vh;
 background-size:cover;
