@@ -23,7 +23,7 @@ export const itens = [
         caminho: '/atleta/0'
     },
     {
-        titulo: 'Cadastro de Perfil',
+        titulo: 'Perfils Cadastrados',
         icone: (
             <SvgIcon>
                 <AccountCircleIcon/>

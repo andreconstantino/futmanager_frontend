@@ -53,7 +53,7 @@ export const me =() => {
     })
   }
 
-export const doDelete = (url) => {
+export const del = (url) => {
     setHeader();
     return axios.delete(backUrl + url);
 }

@@ -1,26 +1,26 @@
 import { useState, useEffect } from 'react'
-import { get, del } from "../../../services/http"
+import { get, del } from "../../services/http"
 import { IconButton } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
 import { startTransition } from 'react';
-import { SIDButton, SIDTitles, SIDSnackbar } from '../../../components';
+import { FutmanagerButton, FutmanagerTitles, FutmanagerSnackbar } from "../../components";
 import AddIcon from '@mui/icons-material/Add';
 
 export default function Cenario() {
-  const [cenarioList, setCenarioList] = useState({});
+  const [perfilList, setPerfilList] = useState({});
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [load, setLoad] = useState(false);
   const [snackOptions, setSnackOptions] = useState({ mensage: "Unknow", type: "error", open: false });
   const navegacao = useNavigate()
 
-  const getCenarios = () => {
+  const getPerfils = () => {
     setLoad(true)
-    get(`api/fluxodecaixa/cenario?page=${page + 1}&size=${pageSize}`).then((response) => {
-      setCenarioList(response.data)
+    get(`api/perfil?page=${page + 1}&size=${pageSize}`).then((response) => {
+      setPerfilList(response.data)
       setLoad(false)
     }).catch((erro) => {
       setSnackOptions(prev => ({
@@ -32,12 +32,12 @@ export default function Cenario() {
     });
   }
 
-  const delCenario = (id) => {
+  const deletarPerfil = (id) => {
     setLoad(true)
-    del(`api/fluxodecaixa/cenario/${id}`).then((response) => {
+    del(`api/perfil/${id}`).then((response) => {
       setLoad(false)
-      setSnackOptions(prev => ({ mensage: "Cenario deletado com Sucesso", type: "success", open: true }));
-      getCenarios()
+      setSnackOptions(prev => ({ mensage: "Perfil deletado com Sucesso", type: "success", open: true }));
+      getPerfils()
     }).catch((erro) => {
       setSnackOptions(prev => ({
         mensage: erro?.response?.data?.message ? erro.response.data.message : erro?.message ? erro.message : 'Unespected error appears',
@@ -49,7 +49,7 @@ export default function Cenario() {
   }
 
   useEffect(() => {
-    getCenarios();
+    getPerfils();
   }, [page, pageSize]);
 
   const closeSnackBar = (event, reason) => {
@@ -61,25 +61,25 @@ export default function Cenario() {
 
   const createItem = () => {
     startTransition(() => {
-      navegacao(`/cenario/0`)
+      navegacao(`/cadastroPerfilForm/0`)
     });
   }
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 100 },
-    { field: 'nome', headerName: 'Name', width: 200 },
-    { field: 'data', headerName: 'Data de Referencia', width: 200 },
-    { field: 'created_at', headerName: 'Data de Criação', width: 250 },
-    { field: 'updated_at', headerName: 'Data de Atualização', width: 250 },
+    { field: 'perfil', headerName: 'Perfil', width: 300 },
+    { field: 'ativo', headerName: 'Ativo', width: 200 },
+    { field: 'created_at', headerName: 'Data de Criação', width: 200 },
+    { field: 'updated_at', headerName: 'Data de Atualização', width: 200 },
     {
-      field: 'edit_button', headerName: 'Editar', width: 65,
+      field: 'edit_button', headerName: 'Editar', width: 75,
       renderCell: (params) => {
         return (
           <IconButton
             color="primary"
             onClick={() => {
               startTransition(() => {
-                navegacao(`/cenario/${params.row.id}`)
+                navegacao(`/cadastroPerfilForm/${params.row.id}`)
               });
             }}>
             <EditIcon />
@@ -88,13 +88,13 @@ export default function Cenario() {
       }
     },
     {
-      field: 'delete_button', headerName: 'Deletar', width: 65,
+      field: 'delete_button', headerName: 'Deletar', width: 75,
       renderCell: (params) => {
         return (
           <IconButton
             color="error"
             onClick={() => {
-              delCenario(params.row.id);
+              deletarPerfil(params.row.id);
             }}>
             <DeleteIcon />
           </IconButton>
@@ -105,15 +105,15 @@ export default function Cenario() {
 
   return (
     <>
-      <SIDTitles title={"Lista de Cenarios"} />
-      <SIDButton className='pl-6' color="primary" click={createItem} icon={<AddIcon />} />
+      <FutmanagerTitles title={"Perfils Cadastrados"} />
+      <FutmanagerButton className='pl-6' color="primary" click={createItem} icon={<AddIcon />} />
       <DataGrid
         className='m-3'
         sx={{ width: '100%' }}
         pagination
         paginationMode={'server'}
         loading={load}
-        rows={cenarioList?.data || []}
+        rows={perfilList?.data || []}
         columns={columns}
         initialState={{
           pagination: {
@@ -127,10 +127,10 @@ export default function Cenario() {
         }}
         paginationModel={{ page: page, pageSize: pageSize }}
         pageSize={pageSize}
-        rowCount={cenarioList?.pagination?.total_records || 0}
+        rowCount={perfilList?.pagination?.total_records || 0}
         pageSizeOptions={[10, 25, 50]}
       />
-      <SIDSnackbar
+      <FutmanagerSnackbar
         mensage={snackOptions.mensage}
         type={snackOptions.type}
         open={snackOptions.open}

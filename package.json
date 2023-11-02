@@ -15,6 +15,7 @@
     "@mui/icons-material": "^5.14.9",
     "@mui/material": "^5.14.9",
     "@mui/styled-engine-sc": "^5.14.9",
+    "@mui/x-data-grid": "^6.17.0",
     "@mui/x-date-pickers": "^6.16.2",
     "axios": "^1.5.0",
     "dayjs": "^1.11.10",

@@ -25,7 +25,7 @@ export default function User() {
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Typography sx={{ minWidth: 100 }}>{usuario.nm_usuario}</Typography>
+        <Typography sx={{ minWidth: 100 }}>{usuario.name}</Typography>
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
