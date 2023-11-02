@@ -7,6 +7,8 @@ import CadastroPerfil from './src/pages/CadastroPerfil/CadastroPerfil';
 import CadastroPerfilForm from './src/pages/CadastroPerfil/CadastroPerfilForm';
 import CadastroCategoria from './src/pages/CadastroCategoria/CadastroCategoria';
 import CadastroCategoriaForm from './src/pages/CadastroCategoria/CadastroCategoriaForm';
+import ChamadaTipo from './src/pages/ChamadaTipo/ChamadaTipo';
+import ChamadaTipoForm from './src/pages/ChamadaTipo/ChamadaTipoForm';
 
 export default function MyRoute(){
     return(
@@ -20,6 +22,8 @@ export default function MyRoute(){
                 <Route path="/cadastroPerfilForm/:id" Component={CadastroPerfilForm} />
                 <Route path="/cadastroCategoria" Component={CadastroCategoria} />
                 <Route path="/cadastroCategoriaForm/:id" Component={CadastroCategoriaForm} />
+                <Route path="/cadastroChamadaTipo" Component={ChamadaTipo} />
+                <Route path="/cadastroChamadaTipoForm/:id" Component={ChamadaTipoForm} />
             </Route>
         </Routes>
     )
