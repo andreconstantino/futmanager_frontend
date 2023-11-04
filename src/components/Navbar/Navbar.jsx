@@ -2,6 +2,7 @@ import Logo from "../LoginPage/Logo"
 import { Roboto } from "../../styles/Styles";
 import NavbarItens from "./NavbarItens";
 import { itens } from "./config";
+import { Stack } from "@mui/material";
 
 export function Navbar({ isVisible }){
     return(
@@ -12,14 +13,19 @@ export function Navbar({ isVisible }){
               </div>
               <h3 className="ml-5 mb-5 font-bold text-red-400">Menu</h3>
               <div className="m-2">
-                <Roboto>
-                  <nav>    
-                  {itens.map((item, index) => {
-                    const active = item.path ? (pathname === item.path) : false;
-                    return <NavbarItens key={index} titulo={item.titulo} icone={item.icone} caminho={item.caminho} isVisible={isVisible}/>
-                  })}
-                  </nav> 
-                </Roboto>
+                <nav>
+                  <Stack component="ul"
+                    spacing={0.5}
+                    sx={{
+                      listStyle: 'none',
+                      p: 0,
+                      m: 0
+                    }}>
+                    {itens.map((item, index) => {
+                      return <NavbarItens item={item} key={index} isVisible={isVisible} />;
+                    })}
+                  </Stack>
+                </nav> 
               </div>
           </div>
       </div>
