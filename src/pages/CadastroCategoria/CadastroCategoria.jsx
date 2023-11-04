@@ -68,7 +68,12 @@ export default function CadastroCategoria() {
   const columns = [
     { field: 'id', headerName: 'ID', width: 100 },
     { field: 'categoria', headerName: 'Categoria', width: 300 },
-    { field: 'ativo', headerName: 'Ativo', width: 200 },
+    { field: 'ativo', headerName: 'Ativo', width: 200,
+    renderCell: (params) => {
+      return (
+        params.value ? 'SIM' : 'NÃO'
+      );
+    } },
     { field: 'created_at', headerName: 'Data de Criação', width: 200 },
     { field: 'updated_at', headerName: 'Data de Atualização', width: 200 },
     {
