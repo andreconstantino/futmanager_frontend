@@ -9,6 +9,8 @@ import CadastroCategoria from './src/pages/CadastroCategoria/CadastroCategoria';
 import CadastroCategoriaForm from './src/pages/CadastroCategoria/CadastroCategoriaForm';
 import ChamadaTipo from './src/pages/ChamadaTipo/ChamadaTipo';
 import ChamadaTipoForm from './src/pages/ChamadaTipo/ChamadaTipoForm';
+import CadastroAdvertencia from './src/pages/CadastroAdvertencia/CadastroAdvertencia';
+import CadastroAdvertenciaForm from './src/pages/CadastroAdvertencia/CadastroAdvertenciaForm';
 
 export default function MyRoute(){
     return(
@@ -24,6 +26,8 @@ export default function MyRoute(){
                 <Route path="/cadastroCategoriaForm/:id" Component={CadastroCategoriaForm} />
                 <Route path="/cadastroChamadaTipo" Component={ChamadaTipo} />
                 <Route path="/cadastroChamadaTipoForm/:id" Component={ChamadaTipoForm} />
+                <Route path="/cadastroAdvertenciaTipo" Component={CadastroAdvertencia} />
+                <Route path="/cadastroAdvertenciaTipoForm/:id" Component={CadastroAdvertenciaForm} />
             </Route>
         </Routes>
     )

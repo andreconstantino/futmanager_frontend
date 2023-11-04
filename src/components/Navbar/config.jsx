@@ -5,6 +5,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import SettingsIcon from '@mui/icons-material/Settings';
 import BadgeIcon from '@mui/icons-material/Badge';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 export const itens = [
     {
@@ -43,6 +44,11 @@ export const itens = [
             titulo: "Chamadas",
             icone: <AssignmentIcon />,
             caminho: '/cadastroChamadaTipo'
+          },
+          {
+            titulo: "Advertências",
+            icone: <WarningAmberIcon />,
+            caminho: '/cadastroAdvertenciaTipo'
           }
         ]
     }
