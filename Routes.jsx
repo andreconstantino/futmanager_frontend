@@ -11,6 +11,9 @@ import ChamadaTipo from './src/pages/ChamadaTipo/ChamadaTipo';
 import ChamadaTipoForm from './src/pages/ChamadaTipo/ChamadaTipoForm';
 import CadastroAdvertencia from './src/pages/CadastroAdvertencia/CadastroAdvertencia';
 import CadastroAdvertenciaForm from './src/pages/CadastroAdvertencia/CadastroAdvertenciaForm';
+import AtletaMenu from './src/pages/Atleta/AtletaMenu';
+import AtletaList from './src/pages/Atleta/AtletaList';
+import AtletaForm from './src/pages/Atleta/AtletaForm';
 
 export default function MyRoute(){
     return(
@@ -19,7 +22,6 @@ export default function MyRoute(){
             </Route>
             <Route Component={Pages}>
                 <Route path="/home" Component={Home} />
-                <Route path="/atleta/:id" Component={Atleta} />
                 <Route path="/cadastroPerfil" Component={CadastroPerfil} />
                 <Route path="/cadastroPerfilForm/:id" Component={CadastroPerfilForm} />
                 <Route path="/cadastroCategoria" Component={CadastroCategoria} />
@@ -28,6 +30,10 @@ export default function MyRoute(){
                 <Route path="/cadastroChamadaTipoForm/:id" Component={ChamadaTipoForm} />
                 <Route path="/cadastroAdvertenciaTipo" Component={CadastroAdvertencia} />
                 <Route path="/cadastroAdvertenciaTipoForm/:id" Component={CadastroAdvertenciaForm} />
+                <Route path="/atleta/:id" Component={Atleta} />
+                <Route path="/atletaForm/:id" Component={AtletaForm} />
+                <Route path="/atletaMenu" Component={AtletaMenu} />
+                <Route path="/atletaList/:id" Component={AtletaList} />
             </Route>
         </Routes>
     )

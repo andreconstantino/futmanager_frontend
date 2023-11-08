@@ -24,7 +24,7 @@ export const itens = [
                 <BadgeIcon/>
             </SvgIcon>
         ),
-        caminho: '/atleta/0'
+        caminho: '/atletaMenu'
     },
     {
         titulo: "Gerencial",

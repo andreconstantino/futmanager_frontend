@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { startTransition } from 'react';
 import { get, put, post } from '../../services/http';
 import FutmanagerSnackbar from '../../components/FutmanagerSnackbar';
-import AtletaForm from "./AtletaForm";
+import AtletaForms from "./AtletaForms";
 
 export default function CenarioFrm() {
     var { id } = useParams();
@@ -72,7 +72,7 @@ export default function CenarioFrm() {
     </Typography>
 
     var form = !load ?
-    <AtletaForm titulo={titulo} id={id} createItem={createItem}/> : <CircularProgress />
+    <AtletaForms titulo={titulo} id={id} createItem={createItem}/> : <CircularProgress />
 
     return (
         <>
