@@ -6,13 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import { startTransition } from 'react';
 import { get, put, post } from '../../services/http';
 import { FutmanagerTitles, FutmanagerSnackbar} from '../../components';
+import { VisuallyHiddenInput } from './style';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 
 export default function AtletaForm() {
-    var { id } = useParams();
+    var { id, categoria_id } = useParams();
     const [atleta, setItem] = useState({
         nm_atletaCompleto: "", 
         nm_apelido: "",
-        categoria_id: "",
+        categoria_id: categoria_id,
         dt_nascimento: "",
         nu_idade: "",
         tp_genero: "",
@@ -20,7 +22,8 @@ export default function AtletaForm() {
         nu_rg: "",
         nm_camiseta: "",
         nu_camiseta: "",
-        nu_calcado: ""
+        nu_calcado: "",
+        caminho: ""
     });
     const [load, setLoad] = useState(id == 0 ? false : true);
     const [snackOptions, setSnackOptions] = useState({ mensage: "Unknow", type: "error", open: false });
@@ -97,14 +100,31 @@ export default function AtletaForm() {
         setSnackOptions(prev => ({ ...prev, open: false }));
     };
 
-    var titulo = id == 0 ? "Cadastrar Atleta" : "Editar Categoria"
+    const salvarCaminhoImagem = (event) => {
+        const selectedFile = event.target.files[0]; // Acessa o primeiro arquivo selecionado
+          
+        if (selectedFile) {
+            const fileName = selectedFile.name; // Obtém o nome do arquivo
+            console.log('Nome do arquivo selecionado:', fileName);
+            setItem({...atleta, caminho: fileName});
+            console.log(atleta)
+        }
+    }
+
+    var titulo = id == 0 ? "Cadastrar Atleta" : "Editar Atleta"
 
     return (
         <>
             <FutmanagerTitles back={voltarPagina} title={titulo} />
             {!load && (
                 <form onSubmit={salvarCategoria}>
-                    <div className='w-full flex flex-row items-start ml-10'>
+                    <div className='w-full flex flex-row items-start ml-10 mb-1'>
+                        <Button className='bg-blue-fut-paz-400' type='submit' component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+                            Selecione uma foto do Atleta
+                            <VisuallyHiddenInput key={atleta.categoria_id} type="file" accept="image/*" onChange={salvarCaminhoImagem} />
+                        </Button>
+                    </div>
+                    <div className='w-full flex flex-row items-start ml-10 mb-1'>
                     <TextField className='w-5/12 mt-5 mr-2'
                         required
                         label="Nome "
@@ -135,11 +155,155 @@ export default function AtletaForm() {
                          fullWidth
                          variant="outlined"
                          margin="normal"
+                         InputProps={{
+                            readOnly: true,
+                          }}
                     >
                          {categoria.map(cat => (
                             <MenuItem key={cat.id} value={cat.id}>{cat.categoria}</MenuItem>
                         ))}
                     </TextField>
+                    </div>
+
+                    <div className='w-full flex flex-row items-start ml-10 mb-1'>
+                        <TextField className='w-3/12 mt-5 mr-1'
+                            type='date'
+                            required
+                            label="Data de Nascimento"
+                            name="dt_nascimento"
+                            value={atleta.dt_nascimento}
+                            onChange={salvarParametros}
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+
+                    <TextField className='w-2/12 mt-5 mr-1'
+                        required
+                        label="Idade"
+                        name="nu_idade"
+                        value={atleta.nu_idade}
+                        onChange={salvarParametros}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                    />
+
+                    <TextField className='w-3/12 mt-5 mr-2'
+                        required
+                        label="CPF"
+                        name="nu_cpf"
+                        value={atleta.nu_cpf}
+                        onChange={salvarParametros}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                    />
+
+                    <TextField className='w-3/12 mt-5 mr-2'
+                        required
+                        label="RG"
+                        name="nu_rg"
+                        value={atleta.nu_rg}
+                        onChange={salvarParametros}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                    />
+
+                    </div>
+
+                    <div className='w-full flex flex-row items-start ml-10 mb-2'>
+                    
+                    <TextField className='w-4/12 mt-5 mr-2'
+                        required
+                        select
+                        name='tp_genero'
+                        value={atleta.tp_genero}
+                        label="Gênero"
+                        onChange={salvarParametros}
+                        fullWidth
+                        variant="outlined"
+                        margin="normal"
+                    >
+                        <MenuItem value={"Feminino"}>Feminino</MenuItem>
+                        <MenuItem value={"Masculino"}>Masculino</MenuItem>
+                    </TextField>
+
+                    <TextField className='w-4/12 mt-5 mr-2'
+                        label="Peso"
+                        name="nu_idade"
+                        value={atleta.nu_idade}
+                        onChange={salvarParametros}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                    />
+
+                    <TextField className='w-3/12 mt-5 mr-2'
+                        label="Altura"
+                        name="nu_idade"
+                        value={atleta.nu_idade}
+                        onChange={salvarParametros}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                    />
+
+                   
+                    </div>
+
+                    <FutmanagerTitles title={"Informações do Uniforme"} />
+
+                    <div className='w-full flex flex-row items-start ml-10 mb-2'>
+                    <TextField className='w-5/12 mt-5 mr-4'
+                        required
+                        label="Nome da Camiseta"
+                        name="nm_camiseta"
+                        value={atleta.nm_camiseta}
+                        onChange={salvarParametros}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                    />
+
+                    <TextField className='w-6/12 mt-5 mr-2'
+                        required
+                        label="Tamanho da Camiseta"
+                        name="nu_camiseta"
+                        value={atleta.nu_camiseta}
+                        onChange={salvarParametros}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                    />
+                    </div>
+
+                    <div className='w-full flex flex-row items-start ml-10 mb-2'>
+                    <TextField className='w-5/12 mt-5 mr-4'
+                        required
+                        label="Número da Camiseta"
+                        name="nu_calcado"
+                        value={atleta.nu_calcado}
+                        onChange={salvarParametros}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                    />
+
+                    <TextField className='w-6/12 mt-5 mr-2'
+                        required
+                        label="Número do Calçado"
+                        name="nu_camiseta"
+                        value={atleta.nu_camiseta}
+                        onChange={salvarParametros}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                    />
                     </div>
 
                     <div className='flex flex-col items-end p-5'>

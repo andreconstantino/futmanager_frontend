@@ -63,7 +63,7 @@ export default function AtletaList() {
 
   const createItem = () => {
     startTransition(() => {
-      navegacao(`/atletaForm/0`)
+      navegacao(`/atletaForm/0/`+ id)
     });
   }
 

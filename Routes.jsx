@@ -31,7 +31,7 @@ export default function MyRoute(){
                 <Route path="/cadastroAdvertenciaTipo" Component={CadastroAdvertencia} />
                 <Route path="/cadastroAdvertenciaTipoForm/:id" Component={CadastroAdvertenciaForm} />
                 <Route path="/atleta/:id" Component={Atleta} />
-                <Route path="/atletaForm/:id" Component={AtletaForm} />
+                <Route path="/atletaForm/:id/:categoria_id" Component={AtletaForm} />
                 <Route path="/atletaMenu" Component={AtletaMenu} />
                 <Route path="/atletaList/:id" Component={AtletaList} />
             </Route>
