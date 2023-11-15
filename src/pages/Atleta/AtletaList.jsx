@@ -3,7 +3,6 @@ import { get, del } from "../../services/http"
 import { CircularProgress, IconButton } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate, useParams } from 'react-router-dom';
 import { startTransition } from 'react';
 import { FutmanagerButton, FutmanagerTitles, FutmanagerSnackbar } from "../../components";
@@ -68,16 +67,20 @@ export default function AtletaList() {
   }
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 100 },
-    { field: 'categoria', headerName: 'Categoria', width: 300 },
-    { field: 'ativo', headerName: 'Ativo', width: 200,
+    { field: 'caminhoImagem', headerName: 'Foto', width: 200,
     renderCell: (params) => {
       return (
-        params.value ? 'SIM' : 'NÃO'
+        <img 
+        style={{width:'100px', height:'100px'}}
+        src={params.row.caminhoImagem} 
+        />
       );
     } },
-    { field: 'created_at', headerName: 'Data de Criação', width: 200 },
-    { field: 'updated_at', headerName: 'Data de Atualização', width: 200 },
+    { field: 'nomeCompleto', headerName: 'Nome Completo', width: 400 },
+    { field: 'nomeUniforme', headerName: 'Nome no Uniforme', width: 200 },
+    { field: 'idade', headerName: 'Idade', width: 100},
+    { field: 'numeroUniforme', headerName: 'Número', width: 100 },
+    { field: 'posicao', headerName: 'Posição', width: 100 },
     {
       field: 'edit_button', headerName: 'Editar', width: 75,
       renderCell: (params) => {
@@ -86,7 +89,7 @@ export default function AtletaList() {
             color="primary"
             onClick={() => {
               startTransition(() => {
-                navegacao(`/cadastroCategoriaForm/${params.row.id}`)
+                navegacao(`/atletaForm/${params.row.id}/${id}`)
               });
             }}>
             <EditIcon />
@@ -94,26 +97,18 @@ export default function AtletaList() {
         );
       }
     },
-    {
-      field: 'delete_button', headerName: 'Deletar', width: 75,
-      renderCell: (params) => {
-        return (
-          <IconButton
-            color="error"
-            onClick={() => {
-              deletarCategoria(params.row.id);
-            }}>
-            <DeleteIcon />
-          </IconButton>
-        );
-      }
-    },
   ];
+
+  const voltarPagina = () => {
+    startTransition(() => {
+        navegacao('/atletaMenu/')
+    });
+  };
 
   return (
     <>
     {load && (<CircularProgress />)}
-      <FutmanagerTitles title={categoria.categoria} />
+      <FutmanagerTitles title={categoria.categoria} back={voltarPagina}/>
       <FutmanagerButton className='pl-6' color="primary" click={createItem} icon={<AddIcon />} />
       <DataGrid
         className='m-3'
@@ -122,6 +117,8 @@ export default function AtletaList() {
         paginationMode={'server'}
         loading={load}
         rows={perfilList?.data || []}
+        getRowId={(row) => row.id}
+        getRowHeight={(params) => 100}
         columns={columns}
         initialState={{
           pagination: {

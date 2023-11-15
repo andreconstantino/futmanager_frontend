@@ -89,7 +89,6 @@ export default function CadastroCategoriaForm() {
             ...item,
             imagem: image
         }
-        console.log(body)
         if (id == 0) criarCategoria(body)
         else editarCategoria(body)
     };
@@ -100,7 +99,6 @@ export default function CadastroCategoriaForm() {
             ...item,
             [name]: value,
         });
-        console.log(item)
     };
 
     const handleImagemChange = (event) => {
@@ -113,7 +111,6 @@ export default function CadastroCategoriaForm() {
         };
 
         reader.readAsDataURL(file);
-        console.log(image)
     };
 
     const voltarPagina = () => {

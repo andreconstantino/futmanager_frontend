@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Button, TextField, CircularProgress, Container, Box, Grid, IconButton, MenuItem } from '@mui/material';
+import { Button, TextField, CircularProgress, Container, Box, Grid, IconButton, MenuItem, Card, CardMedia } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -11,20 +11,25 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 
 export default function AtletaForm() {
     var { id, categoria_id } = useParams();
-    const [atleta, setItem] = useState({
-        nm_atletaCompleto: "", 
-        nm_apelido: "",
+    const [atleta, setAtleta] = useState({
+        nomeCompleto: "", 
+        apelido: "",
         categoria_id: categoria_id,
-        dt_nascimento: "",
-        nu_idade: "",
-        tp_genero: "",
-        nu_cpf: "",
-        nu_rg: "",
-        nm_camiseta: "",
-        nu_camiseta: "",
-        nu_calcado: "",
-        caminho: ""
+        dataNascimento: "",
+        idade: "",
+        genero: "",
+        posicao: "",
+        cpf: "",
+        rg: "",
+        peso: "",
+        altura: "",
+        nomeUniforme: "",
+        numeroUniforme: "",
+        tamanhoUniforme: "",
+        numeroCalcado: ""
     });
+    const [image, setImage] = useState();
+    const [imageName, setImageName] = useState();
     const [load, setLoad] = useState(id == 0 ? false : true);
     const [snackOptions, setSnackOptions] = useState({ mensage: "Unknow", type: "error", open: false });
     const navegacao = useNavigate();
@@ -42,17 +47,28 @@ export default function AtletaForm() {
         });
     }
 
-    useEffect(() => {
-        getCategoria();
-    }, []);
-
-    const criarCategoria = (body) => {
+    const getAtleta = () => {
         setLoad(true)
-        post(`api/categoria`, body).then((response) => {
-            setSnackOptions(prev => ({ mensage: "Categoria criado com Sucesso", type: "success", open: true }));
+        get(`api/atleta/${id}`).then((response) => {
+            setAtleta(response.data)
+            console.log(response.data)
+            setLoad(false)
+        }).catch((erro) => {
+            setSnackOptions(prev => ({
+                mensage: erro?.response?.data?.message ? erro.response.data.message : erro?.message ? erro.message : 'Unespected error appears',
+                type: "error",
+                open: true
+            }));
+        });
+    }
+
+    const criarAtleta = (body) => {
+        setLoad(true)
+        post(`api/atleta`, body).then((response) => {
+            setSnackOptions(prev => ({ mensage: "Atleta criado com Sucesso", type: "success", open: true }));
             setLoad(false)
             setTimeout(() => {
-                navegacao('/cadastroCategoria')
+                navegacao('/atletaList/'+categoria_id)
             }, 3000); 
         }).catch((erro) => {
             setSnackOptions(prev => ({
@@ -64,24 +80,58 @@ export default function AtletaForm() {
         });
     }
 
+    const editarAtleta = (body) => {
+        setLoad(true)
+        put(`api/atleta/${id}`, body).then((response) => {
+            setSnackOptions(prev => ({ 
+                mensage: "Atleta atualizado com Sucesso", 
+                type: "success", 
+                open: true 
+            }));
+            setLoad(false)
+            setTimeout(() => {
+                navegacao('/atletaList/'+categoria_id)
+            }, 3000);                
+        }).catch((erro) => {
+            setSnackOptions(prev => ({
+                mensage: erro?.response?.data?.message ? erro.response.data.message : erro?.message ? erro.message : 'Unespected error appears',
+                type: "error",
+                open: true
+            }));
+            setLoad(false)
+        });
+    }
+
+    const desativarAtleta = () => {
+
+    }
+
     useEffect(() => {
         if (!atleta?.id && id != 0) {
-            getCategoria();
-        }
+            getAtleta();
+        } 
+        setImage(atleta.caminhoImagem)
+        
     }, [atleta]);
 
-    const salvarCategoria = (event) => {
+    useEffect(() => {
+        getCategoria();     
+    }, []);
+
+
+    const salvarAtleta = (event) => {
         event.preventDefault();
         var body = {
             ...atleta,
+            imagem: image
         }
-        if (id == 0) criarCategoria(body)
-        else editarCategoria(body)
+        if (id == 0) criarAtleta(body)
+        else editarAtleta(body)
     };
 
     const salvarParametros = (event) => {
         const { name, value } = event.target;
-        setItem({
+        setAtleta({
             ...atleta,
             [name]: value,
         });
@@ -89,7 +139,7 @@ export default function AtletaForm() {
 
     const voltarPagina = () => {
         startTransition(() => {
-            navegacao('/cadastroCategoria')
+            navegacao('/atletaList/'+categoria_id)
         });
     };
 
@@ -100,16 +150,17 @@ export default function AtletaForm() {
         setSnackOptions(prev => ({ ...prev, open: false }));
     };
 
-    const salvarCaminhoImagem = (event) => {
-        const selectedFile = event.target.files[0]; // Acessa o primeiro arquivo selecionado
-          
-        if (selectedFile) {
-            const fileName = selectedFile.name; // Obtém o nome do arquivo
-            console.log('Nome do arquivo selecionado:', fileName);
-            setItem({...atleta, caminho: fileName});
-            console.log(atleta)
-        }
-    }
+    const handleImagemChange = (event) => {
+        const file = event.target.files[0];
+
+        setImageName(file ? file.name : '');
+        const reader = new FileReader();
+            reader.onloadend = () => {
+            setImage(reader.result);
+        };
+
+        reader.readAsDataURL(file);
+    };
 
     var titulo = id == 0 ? "Cadastrar Atleta" : "Editar Atleta"
 
@@ -117,19 +168,49 @@ export default function AtletaForm() {
         <>
             <FutmanagerTitles back={voltarPagina} title={titulo} />
             {!load && (
-                <form onSubmit={salvarCategoria}>
+                <form onSubmit={salvarAtleta}>
                     <div className='w-full flex flex-row items-start ml-10 mb-1'>
-                        <Button className='bg-blue-fut-paz-400' type='submit' component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-                            Selecione uma foto do Atleta
-                            <VisuallyHiddenInput key={atleta.categoria_id} type="file" accept="image/*" onChange={salvarCaminhoImagem} />
-                        </Button>
+                        <Card className="border-solid border-blue-fut-paz-900 border-2 mt-5 mr-4">
+                            <CardMedia
+                                style={{transition: 'transform 0.3s', height:'200px', width: '200px'}}
+                                component="img"
+                                image={image}
+                                alt="Imagem do Atleta"
+                            />  
+                        </Card>
+
+                        <TextField
+                            className='w-6/12 mt-40 mr-2'
+                            label="Imagem do Atleta"
+                            name="image"
+                            value={imageName}
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            InputProps={{
+                                style: {
+                                    overflow: 'hidden',
+                                    whiteSpace: 'nowrap',
+                                    textOverflow: 'ellipsis',
+                                },
+                                endAdornment: (
+                                    <IconButton color='primary' component="label" variant="contained">
+                                        <CloudUploadIcon />
+                                        <VisuallyHiddenInput key={image} type="file" accept="image/*" onChange={handleImagemChange} />
+                                    </IconButton>
+                                ),
+                            }}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
                     </div>
                     <div className='w-full flex flex-row items-start ml-10 mb-1'>
                     <TextField className='w-5/12 mt-5 mr-2'
                         required
-                        label="Nome "
-                        name="categoria"
-                        value={atleta.categoria}
+                        label="Nome"
+                        name="nomeCompleto"
+                        value={atleta.nomeCompleto}
                         onChange={salvarParametros}
                         variant="outlined"
                         fullWidth
@@ -138,8 +219,8 @@ export default function AtletaForm() {
             
                     <TextField className='w-3/12 mt-5 mr-2'
                          label="Apelido"
-                         name="nm_apelido"
-                         value={atleta.nm_apelido}
+                         name="apelido"
+                         value={atleta.apelido}
                          onChange={salvarParametros}
                          variant="outlined"
                          fullWidth
@@ -170,8 +251,8 @@ export default function AtletaForm() {
                             type='date'
                             required
                             label="Data de Nascimento"
-                            name="dt_nascimento"
-                            value={atleta.dt_nascimento}
+                            name="dataNascimento"
+                            value={atleta.dataNascimento}
                             onChange={salvarParametros}
                             variant="outlined"
                             fullWidth
@@ -184,8 +265,8 @@ export default function AtletaForm() {
                     <TextField className='w-2/12 mt-5 mr-1'
                         required
                         label="Idade"
-                        name="nu_idade"
-                        value={atleta.nu_idade}
+                        name="idade"
+                        value={atleta.idade}
                         onChange={salvarParametros}
                         variant="outlined"
                         fullWidth
@@ -193,10 +274,9 @@ export default function AtletaForm() {
                     />
 
                     <TextField className='w-3/12 mt-5 mr-2'
-                        required
                         label="CPF"
-                        name="nu_cpf"
-                        value={atleta.nu_cpf}
+                        name="cpf"
+                        value={atleta.cpf}
                         onChange={salvarParametros}
                         variant="outlined"
                         fullWidth
@@ -204,10 +284,9 @@ export default function AtletaForm() {
                     />
 
                     <TextField className='w-3/12 mt-5 mr-2'
-                        required
                         label="RG"
-                        name="nu_rg"
-                        value={atleta.nu_rg}
+                        name="rg"
+                        value={atleta.rg}
                         onChange={salvarParametros}
                         variant="outlined"
                         fullWidth
@@ -218,11 +297,11 @@ export default function AtletaForm() {
 
                     <div className='w-full flex flex-row items-start ml-10 mb-2'>
                     
-                    <TextField className='w-4/12 mt-5 mr-2'
+                    <TextField className='w-3/12 mt-5 mr-1'
                         required
                         select
-                        name='tp_genero'
-                        value={atleta.tp_genero}
+                        name='genero'
+                        value={atleta.genero}
                         label="Gênero"
                         onChange={salvarParametros}
                         fullWidth
@@ -233,10 +312,28 @@ export default function AtletaForm() {
                         <MenuItem value={"Masculino"}>Masculino</MenuItem>
                     </TextField>
 
-                    <TextField className='w-4/12 mt-5 mr-2'
+                    <TextField className='w-2/12 mt-5 mr-1'
+                        required
+                        select
+                        label="Posição"
+                        name="posicao"
+                        value={atleta.posicao}
+                        onChange={salvarParametros}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                    >
+                        <MenuItem value={"GOL"}>Goleiro</MenuItem>
+                        <MenuItem value={"ZAG"}>Zagueiro</MenuItem>
+                        <MenuItem value={"LAT"}>Lateral</MenuItem>
+                        <MenuItem value={"MC"}>Meio-Campo</MenuItem>
+                        <MenuItem value={"ATA"}>Atacante</MenuItem>
+                    </TextField>
+
+                    <TextField className='w-3/12 mt-5 mr-2'
                         label="Peso"
-                        name="nu_idade"
-                        value={atleta.nu_idade}
+                        name="peso"
+                        value={atleta.peso}
                         onChange={salvarParametros}
                         variant="outlined"
                         fullWidth
@@ -245,8 +342,8 @@ export default function AtletaForm() {
 
                     <TextField className='w-3/12 mt-5 mr-2'
                         label="Altura"
-                        name="nu_idade"
-                        value={atleta.nu_idade}
+                        name="altura"
+                        value={atleta.altura}
                         onChange={salvarParametros}
                         variant="outlined"
                         fullWidth
@@ -262,8 +359,8 @@ export default function AtletaForm() {
                     <TextField className='w-5/12 mt-5 mr-4'
                         required
                         label="Nome da Camiseta"
-                        name="nm_camiseta"
-                        value={atleta.nm_camiseta}
+                        name="nomeUniforme"
+                        value={atleta.nomeUniforme}
                         onChange={salvarParametros}
                         variant="outlined"
                         fullWidth
@@ -273,8 +370,8 @@ export default function AtletaForm() {
                     <TextField className='w-6/12 mt-5 mr-2'
                         required
                         label="Tamanho da Camiseta"
-                        name="nu_camiseta"
-                        value={atleta.nu_camiseta}
+                        name="tamanhoUniforme"
+                        value={atleta.tamanhoUniforme}
                         onChange={salvarParametros}
                         variant="outlined"
                         fullWidth
@@ -286,8 +383,8 @@ export default function AtletaForm() {
                     <TextField className='w-5/12 mt-5 mr-4'
                         required
                         label="Número da Camiseta"
-                        name="nu_calcado"
-                        value={atleta.nu_calcado}
+                        name="numeroUniforme"
+                        value={atleta.numeroUniforme}
                         onChange={salvarParametros}
                         variant="outlined"
                         fullWidth
@@ -297,8 +394,8 @@ export default function AtletaForm() {
                     <TextField className='w-6/12 mt-5 mr-2'
                         required
                         label="Número do Calçado"
-                        name="nu_camiseta"
-                        value={atleta.nu_camiseta}
+                        name="numeroCalcado"
+                        value={atleta.numeroCalcado}
                         onChange={salvarParametros}
                         variant="outlined"
                         fullWidth
@@ -307,6 +404,14 @@ export default function AtletaForm() {
                     </div>
 
                     <div className='flex flex-col items-end p-5'>
+                        <Button 
+                            onClick={desativarAtleta}
+                            variant="contained" 
+                            className='bg-red-600 hover:bg-red-700' 
+                            startIcon={<SaveIcon />}>
+                            Desativar
+                        </Button>
+
                         <Button 
                             type="submit" 
                             variant="contained" 

@@ -1,5 +1,7 @@
-import { Divider, IconButton } from "@mui/material";
+import { Button, Divider, IconButton } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import FutmanagerButton from "./FutmanagerButton";
+import AddIcon from '@mui/icons-material/Add';
 
 function FutmanagerTitles({ title, back }) {
   return (
