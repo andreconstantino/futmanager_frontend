@@ -36,7 +36,7 @@ export default function CadastroCategoria() {
     setLoad(true)
     del(`api/categoria/${id}`).then((response) => {
       setLoad(false)
-      setSnackOptions(prev => ({ mensage: "Perfil deletado com Sucesso", type: "success", open: true }));
+      setSnackOptions(prev => ({ mensage: "Categoria deletada com Sucesso", type: "success", open: true }));
       getCategorias()
     }).catch((erro) => {
       setSnackOptions(prev => ({
@@ -66,9 +66,17 @@ export default function CadastroCategoria() {
   }
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 100 },
-    { field: 'categoria', headerName: 'Categoria', width: 300 },
-    { field: 'ativo', headerName: 'Ativo', width: 200,
+    { field: 'caminhoImagem', headerName: 'Foto', width: 250,
+    renderCell: (params) => {
+      return (
+        <img 
+        src={params.row.caminhoImagem} 
+        className='w-5/6'
+        />
+      );
+    } },
+    { field: 'categoria', headerName: 'Categoria', width: 250 },
+    { field: 'ativo', headerName: 'Ativo', width: 100,
     renderCell: (params) => {
       return (
         params.value ? 'SIM' : 'NÃO'
@@ -119,6 +127,8 @@ export default function CadastroCategoria() {
         paginationMode={'server'}
         loading={load}
         rows={perfilList?.data || []}
+        getRowId={(row) => row.id}
+        getRowHeight={(params) => 150}
         columns={columns}
         initialState={{
           pagination: {

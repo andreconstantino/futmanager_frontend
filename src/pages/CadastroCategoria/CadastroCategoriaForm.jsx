@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
-import { Button, TextField, CircularProgress, Container, Box, Grid, IconButton, MenuItem } from '@mui/material';
+import { Button, TextField, CircularProgress, Container, Box, Grid, IconButton, MenuItem, CardMedia, Card } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { startTransition } from 'react';
 import { get, put, post } from '../../services/http';
 import { FutmanagerTitles, FutmanagerSnackbar} from '../../components';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import { VisuallyHiddenInput } from './style';
 
 export default function CadastroCategoriaForm() {
     var { id } = useParams();
@@ -13,6 +15,8 @@ export default function CadastroCategoriaForm() {
         categoria: '',
         ativo: 1
     });
+    const [image, setImage] = useState();
+    const [imageName, setImageName] = useState();
     const [load, setLoad] = useState(id == 0 ? false : true);
     const [snackOptions, setSnackOptions] = useState({ mensage: "Unknow", type: "error", open: false });
     const navegacao = useNavigate();
@@ -76,13 +80,16 @@ export default function CadastroCategoriaForm() {
         if (!item?.id && id != 0) {
             getCategoria();
         }
+        setImage(item.caminhoImagem)
     }, [item]);
 
     const salvarCategoria = (event) => {
         event.preventDefault();
         var body = {
             ...item,
+            imagem: image
         }
+        console.log(body)
         if (id == 0) criarCategoria(body)
         else editarCategoria(body)
     };
@@ -93,6 +100,20 @@ export default function CadastroCategoriaForm() {
             ...item,
             [name]: value,
         });
+        console.log(item)
+    };
+
+    const handleImagemChange = (event) => {
+        const file = event.target.files[0];
+
+        setImageName(file ? file.name : '');
+        const reader = new FileReader();
+            reader.onloadend = () => {
+            setImage(reader.result);
+        };
+
+        reader.readAsDataURL(file);
+        console.log(image)
     };
 
     const voltarPagina = () => {
@@ -115,6 +136,13 @@ export default function CadastroCategoriaForm() {
             <FutmanagerTitles back={voltarPagina} title={titulo} />
             {!load && (
                 <form className='w-full flex flex-col items-center' onSubmit={salvarCategoria}>
+                    <Card className="border-solid border-blue-fut-paz-900 border-8 w-2/5 mb-10 ">
+                        <CardMedia
+                            style={{transition: 'transform 0.3s', height: '250px', width: '500px'}}
+                            component="img"
+                            image={image}
+                        />  
+                    </Card>
                     <TextField className='w-3/5'
                         required
                         label="Categoria"
@@ -124,6 +152,32 @@ export default function CadastroCategoriaForm() {
                         variant="outlined"
                         fullWidth
                         margin="normal"
+                    />
+
+                    <TextField
+                        className='w-3/5'
+                        label="Imagem da Categoria"
+                        name="cenario"
+                        value={imageName}
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        InputProps={{
+                            style: {
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap',
+                                textOverflow: 'ellipsis',
+                            },
+                            endAdornment: (
+                                <IconButton color='primary' component="label" variant="contained">
+                                    <CloudUploadIcon />
+                                    <VisuallyHiddenInput key={image} type="file" accept="image/*" onChange={handleImagemChange} />
+                                </IconButton>
+                            ),
+                        }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
             
                     <TextField className='w-3/5'

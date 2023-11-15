@@ -6,9 +6,8 @@ function FutmanagerCard({ image, alt, title, onClick}) {
       <Card className='bg-gray-300 w-5/6 p-5 ml-10 mb-5'>
         <CardActionArea onClick={onClick}>
           <CardMedia
-            style={{height: '250px', transition: 'transform 0.3s'}}
+            style={{height: '250px', width: '500px', transition: 'transform 0.3s'}}
             component="img"
-            height="140"
             image={image}
             alt={alt}
           />

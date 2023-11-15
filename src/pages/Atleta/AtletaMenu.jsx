@@ -62,7 +62,7 @@ function AtletaMenu() {
           {categoriaList.length > 0 ? categoriaList.map((item) => {
             return <FutmanagerCard 
               key={item.id}
-              image={"src/assets/"+item.categoria+".jpeg"}
+              image={item.caminhoImagem}
               alt={item.categoria}
               title={item.categoria}
               onClick={() => navegacao('/atletaList/'+item.id)}
