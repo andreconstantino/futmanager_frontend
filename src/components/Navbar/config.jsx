@@ -1,11 +1,12 @@
 import {SvgIcon} from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import SettingsIcon from '@mui/icons-material/Settings';
 import BadgeIcon from '@mui/icons-material/Badge';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import GroupIcon from '@mui/icons-material/Group';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 export const itens = [
     {
@@ -32,7 +33,7 @@ export const itens = [
         submenu: [
           {
             titulo: "Perfils",
-            icone: <AccountCircleIcon />,
+            icone: <ManageAccountsIcon />,
             caminho: '/cadastroPerfil'
           },
           {
@@ -49,6 +50,11 @@ export const itens = [
             titulo: "Advertências",
             icone: <WarningAmberIcon />,
             caminho: '/cadastroAdvertenciaTipo'
+          },
+          {
+            titulo: "Usuários",
+            icone: <GroupIcon />,
+            caminho: '/usuarios'
           }
         ]
     }
