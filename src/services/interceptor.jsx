@@ -8,9 +8,10 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    console.log("interceptor")
+    //console.log("interceptor")
     
     if (precisaRenovarToken()) {
+        console.log("precisaRenovarToken")
         await postRefreshLogin();
     }
 
@@ -24,7 +25,6 @@ axiosInstance.interceptors.request.use(
 );
 
 function precisaRenovarToken () {
-    console.log("precisaRenovarToken")
     if (getTimestamp() !== null) {
         var timestampAntigo = Number(getTimestamp())
         var expires = Number(getToken().expires_in) - 10
