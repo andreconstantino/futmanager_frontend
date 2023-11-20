@@ -16,6 +16,8 @@ import AtletaList from './src/pages/Atleta/AtletaList';
 import AtletaForm from './src/pages/Atleta/AtletaForm';
 import CadastroUsuario from './src/pages/Usuarios/CadastroUsuario';
 import CadastroUsuarioForm from './src/pages/Usuarios/CadastroUsuarioForm';
+import ResponsavelList from './src/pages/Responsavel/ResponsavelList';
+import ResponsavelForm from './src/pages/Responsavel/ResponsavelForm';
 
 export default function MyRoute(){
     return(
@@ -38,6 +40,8 @@ export default function MyRoute(){
                 <Route path="/atletaList/:id" Component={AtletaList} />
                 <Route path="/usuarios/" Component={CadastroUsuario} />
                 <Route path="/usuarioForm/:id" Component={CadastroUsuarioForm} />
+                <Route path="/responsaveis/" Component={ResponsavelList} />
+                <Route path="/responsaveisForm/:id" Component={ResponsavelForm} />
             </Route>
         </Routes>
     )

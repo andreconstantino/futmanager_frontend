@@ -7,6 +7,7 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import GroupIcon from '@mui/icons-material/Group';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 
 export const itens = [
     {
@@ -26,6 +27,15 @@ export const itens = [
             </SvgIcon>
         ),
         caminho: '/atletaMenu'
+    },
+    {
+      titulo: 'Responsáveis',
+      icone: (
+          <SvgIcon>
+              <EscalatorWarningIcon/>
+          </SvgIcon>
+      ),
+      caminho: '/responsaveis'
     },
     {
         titulo: "Gerencial",

@@ -8,35 +8,18 @@ import { startTransition } from 'react';
 import { FutmanagerButton, FutmanagerTitles, FutmanagerSnackbar } from "../../components";
 import AddIcon from '@mui/icons-material/Add';
 
-export default function AtletaList() {
-    var { id } = useParams();
-    const [perfilList, setPerfilList] = useState({});
-    const [categoria, setCategoria] = useState({});
+export default function ResponsavelList() {
+    const [responsavelList, setResponsavelList] = useState({});
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
     const [load, setLoad] = useState(false);
     const [snackOptions, setSnackOptions] = useState({ mensage: "Unknow", type: "error", open: false });
     const navegacao = useNavigate()
 
-    const getCategoria = () => {
-        setLoad(true)
-        get(`api/categoria/${id}`).then((response) => {
-            setCategoria(response.data)
-            setLoad(false)
-        }).catch((erro) => {
-            setSnackOptions(prev => ({
-                mensage: erro?.response?.data?.message ? erro.response.data.message : erro?.message ? erro.message : 'Unespected error appears',
-                type: "error",
-                open: true
-            }));
-            setLoad(false)
-        });
-    }
-
-  const getAtletas = () => {
+  const getResponsaveis = () => {
     setLoad(true)
-    get(`api/atletaSub/${id}?page=${page + 1}&size=${pageSize}`).then((response) => {
-      setPerfilList(response.data)
+    get(`api/responsavel?page=${page + 1}&size=${pageSize}`).then((response) => {
+      setResponsavelList(response.data)
       setLoad(false)
     }).catch((erro) => {
       setSnackOptions(prev => ({
@@ -49,8 +32,7 @@ export default function AtletaList() {
   }
 
   useEffect(() => {
-    getCategoria();
-    getAtletas();
+    getResponsaveis();
   }, [page, pageSize]);
 
   const closeSnackBar = (event, reason) => {
@@ -62,34 +44,23 @@ export default function AtletaList() {
 
   const createItem = () => {
     startTransition(() => {
-      navegacao(`/atletaForm/0/`+ id)
+      navegacao(`/responsaveisForm/0/`)
     });
   }
 
   const columns = [
-    { field: 'caminhoImagem', headerName: 'Foto', width: 200,
-    renderCell: (params) => {
-      return (
-        <img 
-        style={{width:'100px', height:'100px'}}
-        src={params.row.caminhoImagem} 
-        />
-      );
-    } },
-    { field: 'nomeCompleto', headerName: 'Nome Completo', width: 400 },
-    { field: 'nomeUniforme', headerName: 'Nome no Uniforme', width: 200 },
-    { field: 'idade', headerName: 'Idade', width: 100},
-    { field: 'numeroUniforme', headerName: 'Número', width: 100 },
-    { field: 'posicao', headerName: 'Posição', width: 75 },
+    { field: 'nomeCompleto', headerName: 'Nome Responsável', width: 350 },
+    { field: 'dataNascimento', headerName: 'Data de Nascimento', width: 200 },
+    { field: 'idade', headerName: 'Nome Atleta', width: 400},
     {
-      field: 'edit_button', headerName: 'Editar', width: 75,
+      field: 'edit_button', headerName: 'Editar', width: 100,
       renderCell: (params) => {
         return (
           <IconButton
             color="primary"
             onClick={() => {
               startTransition(() => {
-                navegacao(`/atletaForm/${params.row.id}/${id}`)
+                navegacao(`/responsaveisForm/${params.row.id}`)
               });
             }}>
             <EditIcon />
@@ -99,26 +70,18 @@ export default function AtletaList() {
     },
   ];
 
-  const voltarPagina = () => {
-    startTransition(() => {
-        navegacao('/atletaMenu/')
-    });
-  };
-
   return (
     <>
     {load && (<CircularProgress />)}
-      <FutmanagerTitles title={categoria.categoria} back={voltarPagina}/>
+      <FutmanagerTitles title={"Responsáveis"}/>
       <FutmanagerButton className='pl-6' color="primary" click={createItem} icon={<AddIcon />} />
       <DataGrid
-        className='m-3'
+        className='m-5'
         sx={{ width: '100%' }}
         pagination
         paginationMode={'server'}
         loading={load}
-        rows={perfilList?.data || []}
-        getRowId={(row) => row.id}
-        getRowHeight={(params) => 100}
+        rows={responsavelList?.data || []}
         columns={columns}
         initialState={{
           pagination: {
@@ -132,7 +95,7 @@ export default function AtletaList() {
         }}
         paginationModel={{ page: page, pageSize: pageSize }}
         pageSize={pageSize}
-        rowCount={perfilList?.pagination?.total_records || 0}
+        rowCount={responsavelList?.pagination?.total_records || 0}
         pageSizeOptions={[10, 25, 50]}
       />
       

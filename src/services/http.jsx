@@ -1,25 +1,22 @@
-import axios from "axios"
-import { getToken, setToken, setUser } from "./storage";
+import { getToken, setTimestamp, setToken, setUser } from "./storage";
+import axiosInstance from "./interceptor";
+import axios from "axios";
 
 const backUrl = 'http://127.0.0.1:8000/'//import.meta.env.VITE_BACKEND_URL
 
 export const setHeader = (bearer, token) => {
     var token = getToken();
-    axios.defaults.headers.common['Authorization'] = token.token_type+' '+token.access_token;
+    axiosInstance.defaults.headers.common['Authorization'] = token.token_type+' '+token.access_token;
 }
 
 export const get = (url) => {
-    setHeader();
-    return axios.get(backUrl + url).catch((error)=>{
-        if (error?.response?.data?.message == 'Unauthenticated.') {
-            postRefreshLogin()
-        }
+    return axiosInstance.get(backUrl + url).catch((error)=>{
+        console.log(error);
     });;
 }
 
 export const post = (url, body=null) => {
-    setHeader();
-    return axios.post(backUrl + url, body).catch((error)=>{
+    return axiosInstance.post(backUrl + url, body).catch((error)=>{
         console.log(error)
     });
 }
@@ -29,7 +26,6 @@ export const postLogin = (url, body=null) => {
 }
 
 export const postRefreshLogin = () => {
-    setHeader();
     var token = getToken();
 
     var body = {
@@ -41,7 +37,10 @@ export const postRefreshLogin = () => {
     
     return axios.post(backUrl + 'oauth/token', body).then((response)=>{
         setToken(response.data)
-        me()
+        setTimestamp(new Date().getTime())
+        console.log('auth',response.data)
+    }).catch((error) => {
+        console.log(error)
     });
 }
 
@@ -54,11 +53,9 @@ export const me =() => {
   }
 
 export const del = (url) => {
-    setHeader();
-    return axios.delete(backUrl + url);
+    return axiosInstance.delete(backUrl + url);
 }
 
 export const put = (url, body=null) => {
-    setHeader();
-    return axios.put(backUrl + url, body);
+    return axiosInstance.put(backUrl + url, body);
 }

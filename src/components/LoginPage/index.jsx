@@ -6,7 +6,7 @@ import { Roboto } from '../../styles/Styles';
 import { useState } from 'react';
 import {postLogin} from "../../services/http"
 import { useEffect } from 'react';
-import { setToken } from '../../services/storage';
+import { setToken, setTimestamp } from '../../services/storage';
 
 export default function LoginPage(){
     const [username, setUserName] = useState([""]);
@@ -27,8 +27,9 @@ export default function LoginPage(){
         }
       
         postLogin('oauth/token', body).then((response) => {
-          console.log(response.data)
+          console.log('login',response.data)
           setToken(response.data)
+          setTimestamp(new Date().getTime())
           navigate('/home');
         }).catch ((error) => {
           console.log(error)
