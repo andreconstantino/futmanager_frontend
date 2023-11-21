@@ -18,6 +18,9 @@ import CadastroUsuario from './src/pages/Usuarios/CadastroUsuario';
 import CadastroUsuarioForm from './src/pages/Usuarios/CadastroUsuarioForm';
 import ResponsavelList from './src/pages/Responsavel/ResponsavelList';
 import ResponsavelForm from './src/pages/Responsavel/ResponsavelForm';
+import Chamada from './src/pages/Chamada/Chamada';
+import ChamadaForm from './src/pages/Chamada/ChamadaForm';
+import Presencas from './src/pages/Presencas/Presencas';
 
 export default function MyRoute(){
     return(
@@ -42,6 +45,9 @@ export default function MyRoute(){
                 <Route path="/usuarioForm/:id" Component={CadastroUsuarioForm} />
                 <Route path="/responsaveis/" Component={ResponsavelList} />
                 <Route path="/responsaveisForm/:id" Component={ResponsavelForm} />
+                <Route path="/chamadas/" Component={Chamada} />
+                <Route path="/chamadasForm/:id" Component={ChamadaForm} />
+                <Route path="/presencas/:id" Component={Presencas} />
             </Route>
         </Routes>
     )

@@ -8,6 +8,7 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import GroupIcon from '@mui/icons-material/Group';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
+import ChecklistIcon from '@mui/icons-material/Checklist';
 
 export const itens = [
     {
@@ -36,6 +37,15 @@ export const itens = [
           </SvgIcon>
       ),
       caminho: '/responsaveis'
+    },
+    {
+      titulo: 'Chamadas',
+      icone: (
+          <SvgIcon>
+              <ChecklistIcon/>
+          </SvgIcon>
+      ),
+      caminho: '/chamadas'
     },
     {
         titulo: "Gerencial",
