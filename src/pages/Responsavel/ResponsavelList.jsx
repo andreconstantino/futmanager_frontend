@@ -49,9 +49,38 @@ export default function ResponsavelList() {
   }
 
   const columns = [
-    { field: 'nomeCompleto', headerName: 'Nome Responsável', width: 350 },
-    { field: 'dataNascimento', headerName: 'Data de Nascimento', width: 200 },
-    { field: 'idade', headerName: 'Nome Atleta', width: 400},
+    { field: 'nomeCompleto', headerName: 'Nome Responsável', width: 300 },
+    { field: 'dataNascimento', headerName: 'Data de Nascimento', width: 175 },
+    { field: 'atletas', headerName: 'Nome Atleta', width: 300,
+      renderCell: (params) => {
+        var teste = "";
+        params.row.atletas.forEach((element, index) => {
+          if (index != params.row.atletas.length - 1) {
+            teste += element.nomeUniforme + ', ';
+          } else {
+            teste += element.nomeUniforme;
+          }          
+        }); 
+        return (
+          teste 
+        );
+      }
+    },
+    { field: 'subs', headerName: 'SUB', width: 250,
+      renderCell: (params) => {
+        var teste = "";
+        params.row.atletas.forEach((element, index) => {
+          if (index != params.row.atletas.length - 1) {
+            teste += element.nomeUniforme + ', ';
+          } else {
+            teste += element.nomeUniforme;
+          }          
+        }); 
+        return (
+          teste 
+        );
+      }
+    },
     {
       field: 'edit_button', headerName: 'Editar', width: 100,
       renderCell: (params) => {

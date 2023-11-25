@@ -3,7 +3,7 @@ import { get, del } from "../../services/http"
 import { IconButton } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import { useNavigate } from 'react-router-dom';
 import { startTransition } from 'react';
 import { FutmanagerButton, FutmanagerTitles, FutmanagerSnackbar } from "../../components";
@@ -53,8 +53,12 @@ export default function Chamada() {
     { field: 'id', headerName: 'ID', width: 100 },
     { field: 'dataChamada', headerName: 'Data Chamada', width: 300 },
     { field: 'horaChamada', headerName: 'Horário', width: 200 },
-    { field: 'categoria_id', headerName: 'Categoria', width: 200 },
-    { field: 'finalizada', headerName: 'Finalizada', width: 200,
+    { field: 'categoria_id', headerName: 'Categoria', width: 250,
+      renderCell: (params) => {
+        return params.row.categoria.categoria;
+      }
+    },
+    { field: 'finalizada', headerName: 'Finalizada', width: 150,
     renderCell: (params) => {
       return (
         params.value ? 'SIM' : 'NÃO'
@@ -63,6 +67,9 @@ export default function Chamada() {
     {
       field: 'edit_button', headerName: 'Editar', width: 75,
       renderCell: (params) => {
+        if (params.row.finalizada) {
+          return ""
+        } else {
         return (
           <IconButton
             color="primary"
@@ -74,6 +81,36 @@ export default function Chamada() {
             <EditIcon />
           </IconButton>
         );
+        }
+      }
+    },
+    {
+      field: 'acessar', headerName: 'Acessar', width: 75,
+      renderCell: (params) => {
+        if (params.row.finalizada) {
+          return (
+            <IconButton
+              color="primary"
+              onClick={() => {
+                startTransition(() => {
+                  navegacao(`/presencasView/${params.row.id}`)
+                });
+              }}>
+              <ContentPasteSearchIcon />
+            </IconButton>
+          );
+        } 
+        return (
+          <IconButton
+            color="primary"
+            onClick={() => {
+              startTransition(() => {
+                navegacao(`/presencas/${params.row.id}`)
+              });
+            }}>
+            <ContentPasteSearchIcon />
+          </IconButton>
+        );
       }
     },
   ];
@@ -82,6 +119,8 @@ export default function Chamada() {
     <>
       <FutmanagerTitles title={"Chamadas Cadastradas"} />
       <FutmanagerButton className='pl-6' color="primary" click={createItem} icon={<AddIcon />} />
+      {console.log('atletaList:', chamadas?.data)}
+      {console.log('columns:', columns)}
       <DataGrid
         className='m-3'
         sx={{ width: '100%' }}

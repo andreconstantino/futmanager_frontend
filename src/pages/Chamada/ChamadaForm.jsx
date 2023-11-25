@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
-import { Button, TextField, CircularProgress, Container, Box, Grid, IconButton, MenuItem } from '@mui/material';
+import { Button, TextField, CircularProgress, MenuItem } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { startTransition } from 'react';
 import { get, put, post } from '../../services/http';
 import { FutmanagerTitles, FutmanagerSnackbar} from '../../components';
-import { TimeClock } from '@mui/x-date-pickers';
 import { getUser } from '../../services/storage';
+import { Tune } from '@mui/icons-material';
 
 export default function ChamadaForm() {
     var { id } = useParams();
@@ -50,9 +50,9 @@ export default function ChamadaForm() {
         });
     }
 
-    const getPerfil = () => {
+    const getChamada = () => {
         setLoad(true)
-        get(`api/perfil/${id}`).then((response) => {
+        get(`api/chamada/${id}`).then((response) => {
             setItem(response.data)
             setLoad(false)
         }).catch((erro) => {
@@ -67,15 +67,15 @@ export default function ChamadaForm() {
 
     const editar = (body) => {
         setLoad(true)
-        put(`api/perfil/${id}`, body).then((response) => {
+        put(`api/chamada/${id}`, body).then((response) => {
             setSnackOptions(prev => ({ 
-                mensage: "Perfil atualizado com Sucesso", 
+                mensage: "Chamada atualizada com Sucesso", 
                 type: "success", 
                 open: true 
             }));
             setLoad(false)
             setTimeout(() => {
-                navegacao('/cadastroPerfil')
+                navegacao('/presencas/'+response.data.id)
             }, 3000);                
         }).catch((erro) => {
             setSnackOptions(prev => ({
@@ -93,7 +93,7 @@ export default function ChamadaForm() {
             setSnackOptions(prev => ({ mensage: "Chamada criada com Sucesso", type: "success", open: true }));
             setLoad(false)
             setTimeout(() => {
-                navegacao('/presencas/'+response.id)
+                navegacao('/presencas/'+response.data.id)
             }, 3000); 
         }).catch((erro) => {
             setSnackOptions(prev => ({
@@ -107,7 +107,7 @@ export default function ChamadaForm() {
 
     useEffect(() => {
         if (!item?.id && id != 0) {
-            getPerfil();
+            getChamada();
         }
     }, [item]);
 
@@ -135,7 +135,7 @@ export default function ChamadaForm() {
 
     const voltarPagina = () => {
         startTransition(() => {
-            navegacao('/cadastroPerfil')
+            navegacao('/chamadas')
         });
     };
 
@@ -152,8 +152,9 @@ export default function ChamadaForm() {
         <>
             <FutmanagerTitles back={voltarPagina} title={titulo} />
             {!load && (
-                <form className='w-full flex flex-col items-center' onSubmit={salvar}>
-                    <TextField className='w-3/5'
+                <form className='w-full' onSubmit={salvar}>
+                    <div className='w-full flex flex-row items-start ml-10 mb-1'>
+                        <TextField className='w-2/5 ml-10'
                             type='date'
                             required
                             label="Data da Chamada"
@@ -168,69 +169,72 @@ export default function ChamadaForm() {
                             }}
                         />
 
-                    <TextField className='w-3/5'
-                        type='time'
-                        required
-                        label="Hora"
-                        name="horaChamada"
-                        value={item.horaChamada}
-                        onChange={handleChange}
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    />
+                        <TextField className='w-2/5 ml-5'
+                            type='time'
+                            required
+                            label="Hora"
+                            name="horaChamada"
+                            value={item.horaChamada}
+                            onChange={handleChange}
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    </div>
 
-                    <TextField className='w-3/5'
-                         required
-                         select
-                         name='categoria_id'
-                         value={item.categoria_id}
-                         label="Categoria"
-                         onChange={handleChange}
-                         fullWidth
-                         variant="outlined"
-                         margin="normal"
-                    >
-                         {categoria.map(cat => (
-                            <MenuItem key={cat.id} value={cat.id}>{cat.categoria}</MenuItem>
-                        ))}
-                    </TextField>
+                    <div className='w-full flex flex-row items-start ml-10 mb-1'>
+                        <TextField className='w-3/12 ml-10'
+                            required
+                            select
+                            name='categoria_id'
+                            value={item.categoria_id}
+                            label="Categoria"
+                            onChange={handleChange}
+                            fullWidth
+                            variant="outlined"
+                            margin="normal"
+                        >
+                            {categoria.map(cat => (
+                                <MenuItem key={cat.id} value={cat.id}>{cat.categoria}</MenuItem>
+                            ))}
+                        </TextField>
 
-                    <TextField className='w-3/5'
-                         required
-                         select
-                         name='chamada_tipo_id'
-                         value={item.chamada_tipo_id}
-                         label="Tipo de Chamada"
-                         onChange={handleChange}
-                         fullWidth
-                         variant="outlined"
-                         margin="normal"
-                    >
-                         {tipoChamada.map(cat => (
-                            <MenuItem key={cat.id} value={cat.id}>{cat.tipoChamada}</MenuItem>
-                        ))}
-                    </TextField>
-            
-                    <TextField className='w-3/5'
-                        required
-                        select
-                        name='finalizada'
-                        value={item.finalizada}
-                        label="Ativo"
-                        onChange={handleChange}
-                        fullWidth
-                        variant="outlined"
-                        margin="normal"
-                    >
-                        <MenuItem value={1}>SIM</MenuItem>
-                        <MenuItem value={0}>Não</MenuItem>
-                    </TextField>
+                        <TextField className='w-3/12 ml-10'
+                            required
+                            select
+                            name='chamada_tipo_id'
+                            value={item.chamada_tipo_id}
+                            label="Tipo de Chamada"
+                            onChange={handleChange}
+                            fullWidth
+                            variant="outlined"
+                            margin="normal"
+                        >
+                            {tipoChamada.map(cat => (
+                                <MenuItem key={cat.id} value={cat.id}>{cat.tipoChamada}</MenuItem>
+                            ))}
+                        </TextField>
+                
+                        <TextField className='w-3/12 ml-10'
+                            required
+                            select
+                            name='finalizada'
+                            value={item.finalizada}
+                            label="Finalizada"
+                            onChange={handleChange}
+                            fullWidth
+                            variant="outlined"
+                            margin="normal"
+                        >
+                            <MenuItem value={1}>SIM</MenuItem>
+                            <MenuItem value={0}>Não</MenuItem>
+                        </TextField>
+                    </div>
     
-                    <div className='mt-6 self-end p-5'>
+                    <div className='flex float-right mt-6 p-5'>
                         <Button type="submit" variant="contained" className='bg-green-600 hover:bg-green-700' 
                             startIcon={<SaveIcon />}>
                             Salvar

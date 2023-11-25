@@ -1,34 +1,22 @@
 import { useState, useEffect } from 'react'
-import { Button, TextField, CircularProgress, Container, Box, Grid, IconButton, MenuItem, Checkbox, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import SaveIcon from '@mui/icons-material/Save';
+import { CircularProgress, Checkbox, Button } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { startTransition } from 'react';
-import { get, put, post } from '../../services/http';
-import { FutmanagerTitles, FutmanagerSnackbar} from '../../components';
+import { get, post} from '../../services/http';
+import { FutmanagerSnackbar} from '../../components';
 import { getUser } from '../../services/storage';
 import { DataGrid } from '@mui/x-data-grid';
 import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/Save';
 
 export default function Presencas() {
     var { id } = useParams();
     const usuario = getUser();
-    const [item, setItem] = useState({
-        dataChamada: '',
-        horaChamada: '',
-        categoria_id: '',
-        chamada_tipo_id: '',
-        user_id: usuario.id,
-        finalizada: 0
-    });
     const [load, setLoad] = useState(id == 0 ? false : true);
+    const [categoria, setCategoria] = useState();
     const [chamada, setChamada] = useState({});
     const [atletaList, setAtletaList] = useState({});
-    const [presencas, setPresencas] = useState({});
-    const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(10);
-    const [isCheck, setCheck] = useState(false);
+    const [atletasSelecionados, setAtletasSelecionados] = useState([]);
     const [snackOptions, setSnackOptions] = useState({ mensage: "Unknow", type: "error", open: false });
     const navegacao = useNavigate();
 
@@ -37,6 +25,7 @@ export default function Presencas() {
             setChamada(response.data)
             console.log(response.data)
             setLoad(false)
+            setCategoria(response.data.categoria.id)
             getAtletas(response.data.categoria.id)
         }).catch((erro) => {
             setSnackOptions(prev => ({
@@ -49,7 +38,7 @@ export default function Presencas() {
 
     const getAtletas = (id) => {
         setLoad(true)
-        get(`api/atletaSub/${id}?page=${page + 1}&size=${pageSize}`).then((response) => {
+        get(`api/chamadaSub/${id}`).then((response) => {
           setAtletaList(response.data)
           setLoad(false)
         }).catch((erro) => {
@@ -62,32 +51,37 @@ export default function Presencas() {
         });
       }
 
+    const salvarPresencas = (body) => {
+        setLoad(true)
+        post(`api/presencasAtletas`, body).then((response) => {
+            setSnackOptions(prev => ({ mensage: "Chamada criada com Sucesso", type: "success", open: true }));
+            setLoad(false)
+            console.log(response.data.message);
+            setTimeout(() => {
+                navegacao('/chamadas')
+            }, 3000);
+        }).catch((erro) => {
+            setSnackOptions(prev => ({
+                mensage: erro?.response?.data?.message ? erro.response.data.message : erro?.message ? erro.message : 'Unespected error appears',
+                type: "error",
+                open: true
+            }));
+            setLoad(false)
+        });
+    }
+
+    const prepararDados = () => {
+        var body = {
+            chamada_id: id,
+            categoria_id: categoria,
+            atletas: atletasSelecionados,
+        }
+        salvarPresencas(body)
+    }
+
     useEffect(() => {
         getChamada();    
     }, []);
-
-    const salvar = (event) => {
-        event.preventDefault();
-        var body = {
-            ...item,
-        }
-        if (id == 0) criar(body)
-        else editar(body)
-    };
-
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setItem({
-            ...item,
-            [name]: value,
-        });
-    };
-
-    const voltarPagina = () => {
-        startTransition(() => {
-            navegacao('/cadastroPerfil')
-        });
-    };
 
     const closeSnackBar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -101,23 +95,24 @@ export default function Presencas() {
     const columns = [
         { field: 'numeroUniforme', headerName: 'Número', width: 200 },
         { field: 'nomeCompleto', headerName: 'Nome', width: 600 },
-        {
-          field: 'check_button', headerName: <CheckIcon sx={{color: 'green'}}/>, width: 125,
-          renderCell: (params) => {
-            return (
-                isCheck ? (<FormControlLabel value={isCheck} control={<Radio />} checked onClick={()=> setCheck(true)}/>) : (<FormControlLabel value={isCheck} control={<Radio />} />)
-            );
-          }
-        },
-        {
-            field: 'close_button', headerName: <CloseIcon sx={{color: 'red'}}/>, width: 125,
-            renderCell: (params) => {
-              return (
-                !isCheck ? (<FormControlLabel value={isCheck} control={<Radio />} onClick={()=> setCheck(false)} checked/>) : (<FormControlLabel value={isCheck} control={<Radio />} />)
-              );
-            }
+        { field: 'posicao', headerName: 'Posição', width: 200 },
+        { field: 'checkbox', headerName: <CheckIcon sx={{color: 'green'}}/>,
+            renderCell: (params) => (
+              <Checkbox
+                checked={atletasSelecionados.includes(params.row.id)}
+                onChange={() => handleCheckboxChange(params.row.id)}
+              />
+            ),
           },
       ];
+
+      const handleCheckboxChange = (id) => {
+        if (atletasSelecionados.includes(id)) {
+          setAtletasSelecionados(atletasSelecionados.filter((atletaId) => atletaId !== id));
+        } else {
+          setAtletasSelecionados([...atletasSelecionados, id]);
+        }
+      };
 
     return (
         <>
@@ -126,30 +121,25 @@ export default function Presencas() {
                     <h3 className="text-2xl p-4 text-blue-fut-paz-900 m-3 font-bold">{titulo}</h3>
                 </div>
 
-                <div className='m-8 flex'>
+                <div className='m-8 mt-2 flex'>
                 <DataGrid
                     className='m-3'
                     sx={{ width: '80%' }}
-                    pagination
-                    paginationMode={'server'}
                     loading={load}
                     rows={atletaList?.data || []}
                     columns={columns}
-                    initialState={{
-                    pagination: {
-                        paginationModel: { page: page, pageSize: pageSize },
-                    },
-                    }}
-                    onPaginationModelChange={(model) => {
-                    setPage(model.page)
-                    setPageSize(model.pageSize)
-                    getCenarios
-                    }}
-                    paginationModel={{ page: page, pageSize: pageSize }}
-                    pageSize={pageSize}
-                    rowCount={presencas?.pagination?.total_records || 0}
-                    pageSizeOptions={[10, 25, 50]}
+                    pagination={false}
                 />
+                </div>
+
+                <div className='flex float-right p-5'>
+                    <Button 
+                        onClick={()=> {prepararDados()}}
+                        variant="contained" 
+                        className='bg-green-600 hover:bg-green-700' 
+                        startIcon={<SaveIcon />}>
+                        Finalizar Chamada
+                    </Button>
                 </div>
             </div>
             {load && (<CircularProgress />)}
