@@ -4,9 +4,9 @@ import Logo from './Logo';
 import { Link, useNavigate } from 'react-router-dom';
 import { Roboto } from '../../styles/Styles';
 import { useState } from 'react';
-import {postLogin} from "../../services/http"
+import {postLogin, get} from "../../services/http"
 import { useEffect } from 'react';
-import { setToken, setTimestamp } from '../../services/storage';
+import { setToken, setTimestamp, setUser } from '../../services/storage';
 
 export default function LoginPage(){
     const [username, setUserName] = useState([""]);
@@ -22,13 +22,14 @@ export default function LoginPage(){
           grant_type: 'password',
           client_id: import.meta.env.VITE_CLIENT_ID, 
           client_secret: import.meta.env.VITE_CLIENT_SECRET,
-          username: username, //futmanager@example.com
-          password: password //12345
+          username: username, 
+          password: password 
         }
       
         postLogin('oauth/token', body).then((response) => {
           console.log('login',response.data)
           setToken(response.data)
+          me()
           setTimestamp(new Date().getTime())
           navigate('/home');
         }).catch ((error) => {
@@ -37,6 +38,14 @@ export default function LoginPage(){
           setMensagemErro("Não foi possivel realizar o seu login")
         });
       } 
+    }
+
+    const me =() => {
+      get('api/me').then((response) => {
+        setUser(response.data);
+      }).catch ((error) => {
+        console.log(error)
+      })
     }
 
     useEffect(() => {

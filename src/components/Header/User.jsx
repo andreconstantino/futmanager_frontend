@@ -9,15 +9,18 @@ import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import {getUser} from './../../services/storage'
+import { useNavigate } from 'react-router-dom';
 
 export default function User() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const navegacao = useNavigate();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    navegacao('/')
   };
 
   const usuario = getUser();
@@ -26,7 +29,7 @@ export default function User() {
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         <Typography sx={{ minWidth: 100 }}>{usuario.name}</Typography>
-        <Tooltip title="Account settings">
+        <Tooltip title="Configurações">
           <IconButton
             onClick={handleClick}
             size="small"
@@ -35,7 +38,8 @@ export default function User() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar sx={{ width: 32, height: 32 }}>{usuario ? usuario.name.charAt(0).toUpperCase() : ""}</Avatar>
+            
           </IconButton>
         </Tooltip>
       </Box>
@@ -78,7 +82,7 @@ export default function User() {
           <ListItemIcon>
             <Logout fontSize="small" className='text-red-400' />
           </ListItemIcon>
-          Logout
+          Sair
         </MenuItem>
       </Menu>
     </React.Fragment>
