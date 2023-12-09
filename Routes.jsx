@@ -24,6 +24,9 @@ import Presencas from './src/pages/Presencas/Presencas';
 import PresencasView from './src/pages/Presencas/PresencasView';
 import AtletaView from './src/pages/AtletaView/AtletaView';
 import AtletaViewEdit from './src/pages/AtletaView/AtletaViewEdit';
+import ResponsavelView from './src/pages/ResponsavelView/ResponsavelView';
+import ResponsavelViewEdit from './src/pages/ResponsavelView/ResponsavelViewEdit';
+import ResponsavelListView from './src/pages/ResponsavelView/ResponsavelListView';
 
 export default function MyRoute(){
     return(
@@ -54,6 +57,9 @@ export default function MyRoute(){
                 <Route path="/presencasView/:id" Component={PresencasView} />
                 <Route path="/atletaview/:id" Component={AtletaView} />
                 <Route path="/atletaviewedit/:id" Component={AtletaViewEdit} />
+                <Route path="/responsavellistview/" Component={ResponsavelListView} />
+                <Route path="/responsavelview/:id" Component={ResponsavelView} />
+                <Route path="/responsavelviewedit/:id" Component={ResponsavelViewEdit} />
             </Route>
         </Routes>
     )

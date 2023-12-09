@@ -58,6 +58,15 @@ export const itens = [
       caminho: '/atletaview/1'
     },
     {
+      titulo: 'Meus responsáveis',
+      icone: (
+          <SvgIcon>
+              <EscalatorWarningIcon/>
+          </SvgIcon>
+      ),
+      caminho: '/responsavellistview'
+    },
+    {
         titulo: "Gerencial",
         icone: <SettingsIcon />,
         submenu: [
