@@ -20,6 +20,7 @@ export const delToken = () => {
 
 export const setUser = (data) => {
     localStorage.setItem(USER_STORAGE, btoa(JSON.stringify(data)) +":"+ getHash());
+    console.log("SetUser: ", USER_STORAGE)
 }
 
 export const getUser = () => {

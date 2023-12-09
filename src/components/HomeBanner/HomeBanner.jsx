@@ -1,4 +1,4 @@
-import ImagemCategoria from "./ImagemCategoria";
+import ImagemFundo from "./ImagemFundo";
 import ImagemPrincipal from "./ImagemPrincipal";
 
 
@@ -7,7 +7,7 @@ export function HomeBanner(){
         <>
         <div>
             <div className="flex">
-                <ImagemCategoria/>
+                <ImagemFundo/>
                 <ImagemPrincipal/>
             </div>
         </div>

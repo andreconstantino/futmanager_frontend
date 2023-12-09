@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -8,27 +7,41 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
-import {getUser} from './../../services/storage'
+import {getUser, delUser} from './../../services/storage'
 import { useNavigate } from 'react-router-dom';
+import { Fragment, useEffect, useState } from 'react';
 
 export default function User() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const navegacao = useNavigate();
+  const [usuario, setUsuario] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
+    delUser()
     navegacao('/')
   };
 
-  const usuario = getUser();
+  useEffect(() => {
+    setUsuario(getUser());
+    const user = getUser();
+    console.log("Usuario: " + user)
+    
+    if (user !== null) {
+      console.log('Nome do usuário:', user.name);
+    } else {
+      console.log('Usuário não autenticado ou não encontrado.');
+    }
 
+  }, []);
+  
   return (
-    <React.Fragment>
+    <Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Typography sx={{ minWidth: 100 }}>{usuario.name}</Typography>
+        <Typography sx={{ minWidth: 100 }}>{usuario ? usuario.name : ""}</Typography>
         <Tooltip title="Configurações">
           <IconButton
             onClick={handleClick}
@@ -85,6 +98,6 @@ export default function User() {
           Sair
         </MenuItem>
       </Menu>
-    </React.Fragment>
+    </Fragment>
   );
 }

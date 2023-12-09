@@ -29,8 +29,10 @@ export default function LoginPage(){
         postLogin('oauth/token', body).then((response) => {
           console.log('login',response.data)
           setToken(response.data)
-          me()
+          const resultado = me()
           setTimestamp(new Date().getTime())
+
+          console.log("Resultado:", resultado)
           navigate('/home');
         }).catch ((error) => {
           console.log(error)
@@ -43,8 +45,11 @@ export default function LoginPage(){
     const me =() => {
       get('api/me').then((response) => {
         setUser(response.data);
+        console.log("ME:", response.data)
+        return response.data
       }).catch ((error) => {
         console.log(error)
+        return error
       })
     }
 
