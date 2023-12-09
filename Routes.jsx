@@ -22,6 +22,8 @@ import Chamada from './src/pages/Chamada/Chamada';
 import ChamadaForm from './src/pages/Chamada/ChamadaForm';
 import Presencas from './src/pages/Presencas/Presencas';
 import PresencasView from './src/pages/Presencas/PresencasView';
+import AtletaView from './src/pages/AtletaView/AtletaView';
+import AtletaViewEdit from './src/pages/AtletaView/AtletaViewEdit';
 
 export default function MyRoute(){
     return(
@@ -50,6 +52,8 @@ export default function MyRoute(){
                 <Route path="/chamadasForm/:id" Component={ChamadaForm} />
                 <Route path="/presencas/:id" Component={Presencas} />
                 <Route path="/presencasView/:id" Component={PresencasView} />
+                <Route path="/atletaview/:id" Component={AtletaView} />
+                <Route path="/atletaviewedit/:id" Component={AtletaViewEdit} />
             </Route>
         </Routes>
     )

@@ -9,6 +9,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import ChecklistIcon from '@mui/icons-material/Checklist';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 export const itens = [
     {
@@ -46,6 +47,15 @@ export const itens = [
           </SvgIcon>
       ),
       caminho: '/chamadas'
+    },
+    {
+      titulo: 'Minhas informações',
+      icone: (
+          <SvgIcon>
+              <AccountBoxIcon/>
+          </SvgIcon>
+      ),
+      caminho: '/atletaview/1'
     },
     {
         titulo: "Gerencial",
