@@ -2,6 +2,9 @@ import {SvgIcon} from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import {getUser} from './../../services/storage'
+
+const user = getUser();
 
 export const itensAtleta = [
     {
@@ -20,7 +23,7 @@ export const itensAtleta = [
               <AccountBoxIcon/>
           </SvgIcon>
       ),
-      caminho: '/atletaview/1'
+      caminho: '/atletaview/' + user.id
     },
     {
       titulo: 'Meus responsáveis',

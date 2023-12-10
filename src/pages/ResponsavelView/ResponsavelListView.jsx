@@ -6,7 +6,7 @@ import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import { useNavigate, useParams } from 'react-router-dom';
 import { startTransition } from 'react';
 import { FutmanagerButton, FutmanagerTitles, FutmanagerSnackbar } from "../../components";
-import AddIcon from '@mui/icons-material/Add';
+import {getUser} from './../../services/storage'
 import EditIcon from '@mui/icons-material/Edit';
 
 export default function ResponsavelListView() {
@@ -19,7 +19,7 @@ export default function ResponsavelListView() {
 
   const getResponsaveis = () => {
     setLoad(true)
-    get(`api/atletaResponsaveis/1`).then((response) => {
+    get(`api/atletaResponsaveis/${user.id}`).then((response) => {
       setResponsavelList(response)
       setLoad(false)
     }).catch((erro) => {
@@ -48,6 +48,8 @@ export default function ResponsavelListView() {
       navegacao(`/responsaveisForm/0/`)
     });
   }
+
+  const user = getUser();
 
   const columns = [
     { field: 'nomeCompleto', headerName: 'Nome Responsável', width: 500 },
