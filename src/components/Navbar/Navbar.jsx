@@ -1,10 +1,27 @@
 import Logo from "../LoginPage/Logo"
-import { Roboto } from "../../styles/Styles";
 import NavbarItens from "./NavbarItens";
-import { itens } from "./config";
+import { itensAdmin } from "./admin";
+import { itensAtleta } from "./atleta";
+import { itensEquipe } from "./equipe";
+import {getUser} from './../../services/storage'
 import { Stack } from "@mui/material";
 
 export function Navbar({ isVisible }){
+
+  const user = getUser();
+  var perfil = user.perfil_id
+
+  let itens = []
+  
+  if (perfil == 1)  {
+    itens = itensAdmin
+  } else if (perfil == 3){
+    itens = itensEquipe
+  } else if (perfil == 4){
+    itens = itensAtleta
+  } else {
+    itens = itensAtleta
+  }
     return(
       <div className="flex">
           <div className={` bg-blue-fut-paz ${isVisible ? "w-72": "w-20"} duration-300 relative shadow-md`}>

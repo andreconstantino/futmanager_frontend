@@ -15,7 +15,7 @@ export default function User() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const navegacao = useNavigate();
-  const [usuario, setUsuario] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -26,22 +26,14 @@ export default function User() {
   };
 
   useEffect(() => {
-    setUsuario(getUser());
     const user = getUser();
-    console.log("Usuario: " + user)
-    
-    if (user !== null) {
-      console.log('Nome do usuário:', user.name);
-    } else {
-      console.log('Usuário não autenticado ou não encontrado.');
-    }
-
+    setUserInfo(user)
   }, []);
-  
+
   return (
     <Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Typography sx={{ minWidth: 100 }}>{usuario ? usuario.name : ""}</Typography>
+        <Typography sx={{ minWidth: 100 }}>{userInfo ? userInfo.name : ""}</Typography>
         <Tooltip title="Configurações">
           <IconButton
             onClick={handleClick}
@@ -51,7 +43,7 @@ export default function User() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>{usuario ? usuario.name.charAt(0).toUpperCase() : ""}</Avatar>
+            <Avatar sx={{ width: 32, height: 32 }}>{userInfo ? userInfo.name.charAt(0).toUpperCase() : ""}</Avatar>
             
           </IconButton>
         </Tooltip>

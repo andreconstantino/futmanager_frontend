@@ -11,7 +11,7 @@ import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
-export const itens = [
+export const itensAdmin = [
     {
         titulo: 'Home',
         icone: (
@@ -47,24 +47,6 @@ export const itens = [
           </SvgIcon>
       ),
       caminho: '/chamadas'
-    },
-    {
-      titulo: 'Minhas informações',
-      icone: (
-          <SvgIcon>
-              <AccountBoxIcon/>
-          </SvgIcon>
-      ),
-      caminho: '/atletaview/1'
-    },
-    {
-      titulo: 'Meus responsáveis',
-      icone: (
-          <SvgIcon>
-              <EscalatorWarningIcon/>
-          </SvgIcon>
-      ),
-      caminho: '/responsavellistview'
     },
     {
         titulo: "Gerencial",
