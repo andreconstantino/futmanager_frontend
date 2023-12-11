@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
-import { Button, TextField, CircularProgress, Container, Box, Grid, IconButton, MenuItem, InputLabel, OutlinedInput, InputAdornment, FormControl } from '@mui/material';
+import { Button, TextField, CircularProgress, IconButton, MenuItem, Card, CardMedia } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { startTransition } from 'react';
 import { get, put, post } from '../../services/http';
 import { FutmanagerTitles, FutmanagerSnackbar} from '../../components';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import { VisuallyHiddenInput } from './style';
 
 export default function CadastroUsuarioForm() {
     var { id } = useParams();
@@ -15,15 +16,38 @@ export default function CadastroUsuarioForm() {
         login: '',
         password: '',
         perfil_id: '',
+        atleta_id: '',
         ativo: 1
     });
-    const [showPassword, setShowPassword] = useState(false);
+    const [categoria, setCategoria] = useState({
+        ativo: '',
+        categoria: "",
+        created_at: "",
+        id: '',
+        updated_at: ""
+    });
+    const [atletaList, setAtletaList] = useState({});
+    const [image, setImage] = useState();
+    const [imageName, setImageName] = useState();
     const [perfil, setPerfil] = useState([]);
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
     const [load, setLoad] = useState(id == 0 ? false : true);
     const [snackOptions, setSnackOptions] = useState({ mensage: "Unknow", type: "error", open: false });
     const navegacao = useNavigate();
+
+    const getCategoria = () => {
+        get('api/categoria').then((response) => {
+            setCategoria(response.data.data)
+            console.log(response.data.data)
+        }).catch((erro) => {
+            setSnackOptions(prev => ({
+                mensage: erro?.response?.data?.message ? erro.response.data.message : erro?.message ? erro.message : 'Unespected error appears',
+                type: "error",
+                open: true
+            }));
+        });
+    }
 
     const getPerfils = () => {
         setLoad(true)
@@ -100,16 +124,22 @@ export default function CadastroUsuarioForm() {
         if (!usuario?.id && id != 0) {
             getUsuario();
         }
+        setImage(usuario.caminhoImagem)
     }, [usuario]);
 
     useEffect(() => {
         getPerfils();
     }, [page, pageSize]);
 
+    useEffect(() => {
+        getCategoria(); 
+    }, []);
+
     const salvarUsuario = (event) => {
         event.preventDefault();
         var body = {
             ...usuario,
+            imagem: image
         }
         if (id == 0) criarUsuario(body)
         else editarUsuario(body)
@@ -139,17 +169,122 @@ export default function CadastroUsuarioForm() {
 
     var titulo = id == 0 ? "Cadastrar Usuário" : "Editar Usuário"
 
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleImagemChange = (event) => {
+    const file = event.target.files[0];
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+    setImageName(file ? file.name : '');
+    const reader = new FileReader();
+        reader.onloadend = () => {
+        setImage(reader.result);
+    };
+
+    reader.readAsDataURL(file);
+};
+
+const buscarAtletas = (event) => {
+    const cat = event.target;
+    get(`api/atletaSub/${cat.value}?page=${page + 1}&size=${pageSize}`).then((response) => {
+        setAtletaList(response.data.data)
+        console.log(response.data.data)
+      }).catch((erro) => {
+        setSnackOptions(prev => ({
+          mensage: erro?.response?.data?.message ? erro.response.data.message : erro?.message ? erro.message : 'Unespected error appears',
+          type: "error",
+          open: true
+        }));
+        setLoad(false)
+      });
+}
+
+    const cardImagem = (
+        <Card className="border-solid border-blue-fut-paz-900 border-2">
+            <CardMedia
+                style={{transition: 'transform 0.3s', height:'150px', width: '150px'}}
+                component="img"
+                image={image}
+                alt="Imagem do Usuário"
+            />  
+        </Card>
+    )
+
+  const selecionarImagem = (
+    <>
+        <TextField
+            className='w-3/5'
+            label="Imagem do Atleta"
+            name="image"
+            value={imageName}
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            InputProps={{
+                style: {
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                },
+                endAdornment: (
+                    <IconButton color='primary' component="label" variant="contained">
+                        <CloudUploadIcon />
+                        <VisuallyHiddenInput key={image} type="file" accept="image/*" onChange={handleImagemChange} />
+                    </IconButton>
+                ),
+            }}
+            InputLabelProps={{
+                shrink: true,
+            }}
+        />
+    </>
+  )
+
+  const atleta = (
+    <>
+    <TextField
+        className='w-3/5'
+         required
+         select
+         name='id'
+         label="Categoria"
+         onChange={buscarAtletas}
+         fullWidth
+         variant="outlined"
+         margin="normal"
+    >
+        {categoria.length > 0 ? categoria.map(cat => (
+           <MenuItem key={cat.id} value={cat.id}>{cat.categoria}</MenuItem>
+        )) : <MenuItem value="">Nenhuma categoria disponível</MenuItem>}
+    </TextField>
+
+    {atletaList.length > 0 ? 
+        <TextField 
+            className='w-3/5'
+            required
+            select
+            name='atleta_id'
+            label="Atletas"
+            value={usuario.atleta_id}
+            onChange={handleChange}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+        >
+            {atletaList.length > 0 ? atletaList.map(atleta => (
+                <MenuItem key={atleta.id} value={atleta.id}>{atleta.nomeCompleto}</MenuItem>
+            )) : ""}
+        </TextField>
+    : ""
+    }
+    </>
+  )
 
     return (
         <>
             <FutmanagerTitles back={voltarPagina} title={titulo} />
             {!load && (
                 <form className='w-full flex flex-col items-center' onSubmit={salvarUsuario}>
+                    {usuario.perfil_id === 1 || usuario.perfil_id === 3 || usuario.perfil_id === 4 ?
+                    cardImagem
+                    : ""}
                     <TextField className='w-3/5'
                         required
                         label="Nome do Usuário"
@@ -199,6 +334,14 @@ export default function CadastroUsuarioForm() {
                             <MenuItem key={item.id} value={item.id}>{item.perfil}</MenuItem>
                         ))}
                     </TextField>
+
+                    {usuario.perfil_id === 5 ? (
+                        atleta
+                    ) : usuario.perfil_id === 1 || usuario.perfil_id === 3 || usuario.perfil_id === 4 ? (
+                        selecionarImagem
+                    ) : (
+                        ""
+                    )}
                     
 
                     <TextField className='w-3/5'
