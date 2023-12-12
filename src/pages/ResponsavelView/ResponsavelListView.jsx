@@ -19,7 +19,7 @@ export default function ResponsavelListView() {
 
   const getResponsaveis = () => {
     setLoad(true)
-    get(`api/atletaResponsaveis/${user.id}`).then((response) => {
+    get(`api/atletaResponsaveis/${user.atleta_id}`).then((response) => {
       setResponsavelList(response)
       setLoad(false)
     }).catch((erro) => {

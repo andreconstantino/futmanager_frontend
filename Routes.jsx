@@ -27,6 +27,7 @@ import AtletaViewEdit from './src/pages/AtletaView/AtletaViewEdit';
 import ResponsavelView from './src/pages/ResponsavelView/ResponsavelView';
 import ResponsavelViewEdit from './src/pages/ResponsavelView/ResponsavelViewEdit';
 import ResponsavelListView from './src/pages/ResponsavelView/ResponsavelListView';
+import Frequencia from './src/pages/Frequencia/Frequencia';
 
 export default function MyRoute(){
     return(
@@ -60,6 +61,7 @@ export default function MyRoute(){
                 <Route path="/responsavellistview/" Component={ResponsavelListView} />
                 <Route path="/responsavelview/:id" Component={ResponsavelView} />
                 <Route path="/responsavelviewedit/:id" Component={ResponsavelViewEdit} />
+                <Route path="/frequencia/:id" Component={Frequencia} />
             </Route>
         </Routes>
     )

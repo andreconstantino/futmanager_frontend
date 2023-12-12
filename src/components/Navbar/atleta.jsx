@@ -2,9 +2,12 @@ import {SvgIcon} from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import ViewTimelineIcon from '@mui/icons-material/ViewTimeline';
 import {getUser} from './../../services/storage'
 
 const user = getUser();
+
+console.log("NavBAr Atleta", user)
 
 export const itensAtleta = [
     {
@@ -23,7 +26,7 @@ export const itensAtleta = [
               <AccountBoxIcon/>
           </SvgIcon>
       ),
-      caminho: '/atletaview/' + user.id
+      caminho: '/atletaview/' + user.atleta_id
     },
     {
       titulo: 'Meus responsáveis',
@@ -33,5 +36,14 @@ export const itensAtleta = [
           </SvgIcon>
       ),
       caminho: '/responsavellistview'
+    },
+    {
+        titulo: 'Frequência',
+        icone: (
+            <SvgIcon>
+                <ViewTimelineIcon/>
+            </SvgIcon>
+        ),
+        caminho: '/frequencia/' + user.atleta_id
     },
 ]

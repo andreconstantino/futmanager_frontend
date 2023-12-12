@@ -19,7 +19,7 @@ export function Navbar({ isVisible }){
     itens = itensEquipe
   } else if (perfil == 4){
     itens = itensAtleta
-  } else {
+  } else if (perfil == 5){
     itens = itensAtleta
   }
     return(
