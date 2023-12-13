@@ -3,11 +3,10 @@ import HomeIcon from '@mui/icons-material/Home';
 import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import ViewTimelineIcon from '@mui/icons-material/ViewTimeline';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import {getUser} from './../../services/storage'
 
 const user = getUser();
-
-console.log("NavBAr Atleta", user)
 
 export const itensAtleta = [
     {
@@ -45,5 +44,14 @@ export const itensAtleta = [
             </SvgIcon>
         ),
         caminho: '/frequencia/' + user.atleta_id
+    },
+    {
+        titulo: 'Advertências',
+        icone: (
+            <SvgIcon>
+                <WarningAmberIcon/>
+            </SvgIcon>
+        ),
+        caminho: '/advertencias/' + user.atleta_id
     },
 ]
