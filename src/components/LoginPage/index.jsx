@@ -69,7 +69,7 @@ export default function LoginPage(){
                 <div className='w-full'>
                     <TextField className='w-10/12 ml-6 mb-4 sm:w-10/12 sm:ml-8'
                       required
-                      id="standard-required"
+                      id="standard-required-username"
                       onChange={(e) => setUserName(e.target.value)}
                       error={erro}
                       label="E-mail" 
@@ -77,7 +77,7 @@ export default function LoginPage(){
                     />
                     <TextField className='w-10/12 ml-6 mb-4 sm:w-10/12 sm:ml-8'
                       required
-                      id="standard-required"
+                      id="standard-required-password"
                       type='password'
                       onChange={(e) => setPassword(e.target.value)}
                       error={erro}
