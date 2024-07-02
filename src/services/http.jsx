@@ -2,7 +2,7 @@ import { getToken, setTimestamp, setToken, setUser } from "./storage";
 import axiosInstance from "./interceptor";
 import axios from "axios";
 
-const backUrl = 'http://127.0.0.1:8000/'//import.meta.env.VITE_BACKEND_URL
+const backUrl = 'http://localhost:8000/'//import.meta.env.VITE_BACKEND_URL
 
 export const setHeader = (bearer, token) => {
     var token = getToken();

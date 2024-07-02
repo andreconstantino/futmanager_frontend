@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getTimestamp, getToken } from './storage';
+import { getTimestamp, getToken, getUser } from './storage';
 import { postRefreshLogin, setHeader } from './http';
 
 const axiosInstance = axios.create({
@@ -8,14 +8,18 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    //console.log("interceptor")
     
     if (precisaRenovarToken()) {
-        console.log("precisaRenovarToken")
         await postRefreshLogin();
     }
 
-    var token = getToken();
+    const token = getToken();
+    const user = getUser();
+
+    if(!token || !user){
+      throw Error
+    }
+
     config.headers['Authorization'] = token.token_type+' '+token.access_token
     return config;
   },
@@ -25,7 +29,7 @@ axiosInstance.interceptors.request.use(
 );
 
 function precisaRenovarToken () {
-    if (getTimestamp() !== null) {
+    if (getTimestamp() !== null && getToken() !== null) {
         var timestampAntigo = Number(getTimestamp())
         var expires = Number(getToken().expires_in) - 10
         var timestampAtual = new Date().getTime()
