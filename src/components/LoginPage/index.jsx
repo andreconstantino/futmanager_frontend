@@ -26,10 +26,10 @@ export default function LoginPage(){
           password: password 
         }
       
-        postLogin('oauth/token', body).then((response) => {
+        postLogin('oauth/token', body).then(async(response) => {
           console.log('login',response.data)
           setToken(response.data)
-          const resultado = me()
+          const resultado = await me()
           setTimestamp(new Date().getTime())
 
           console.log("Resultado:", resultado)
@@ -42,8 +42,8 @@ export default function LoginPage(){
       } 
     }
 
-    const me =() => {
-      get('api/me').then((response) => {
+    const me = async () => {
+      await get('api/me').then((response) => {
         setUser(response.data);
         console.log("ME:", response.data)
         return response.data
