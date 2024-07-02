@@ -11,6 +11,9 @@ export const setToken = (data) => {
 }
 
 export const getToken = () => {
+    if (!localStorage.getItem(TOKEN_STORAGE)) {
+        return null;
+    }
     return JSON.parse(atob(localStorage.getItem(TOKEN_STORAGE).split(':')[0]));
 }
 
@@ -32,7 +35,9 @@ export const getUser = () => {
 }
 
 export const delUser = () => {
-    localStorage.removeItem(USER_STORAGE);  
+    console.log("Removeu?");
+    localStorage.removeItem(USER_STORAGE);
+    localStorage.removeItem(TOKEN_STORAGE);  
 }
 
 export const setTimestamp = (data) => {
