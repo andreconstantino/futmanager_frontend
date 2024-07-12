@@ -28,7 +28,7 @@ export function Navbar({ isVisible }){
              <div className={`${isVisible ? "pl-12":"p-1"}`}>
               <Logo />
               </div>
-              <h3 className="ml-5 mb-5 font-bold text-red-400">Menu</h3>
+              <h3 className="ml-5 mb-5 font-bold text-white">Menu</h3>
               <div className="m-2">
                 <nav>
                   <Stack component="ul"
