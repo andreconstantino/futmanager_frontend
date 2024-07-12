@@ -7,7 +7,7 @@ export default function Header({onClick }){
     return (
       <div className=" bg-white h-16 w-full shadow-md flex justify-between">
       <div className="p-3">
-        <IconButton onClick={onClick}>
+        <IconButton onClick={onClick} aria-label="Menu">
           <Badge>
             <MenuIcon className="text-red-400"/>
           </Badge>

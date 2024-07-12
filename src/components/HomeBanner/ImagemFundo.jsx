@@ -35,6 +35,6 @@ export default function ImagemFundo(){
     return(
         usuario.perfil_id == 5 ? (
             <img className="opacity-50" style={{width:'1190px', height: '480px'}} src={atleta.categoria?.caminhoImagem} />
-        ): <img className="opacity-50" style={{width:'1190px', height: '480px'}} src="equipe.jpeg" />
+        ): <img className="opacity-50" style={{width:'1190px', height: '480px'}} alt="" src="equipe.jpeg" />
     )
 }
