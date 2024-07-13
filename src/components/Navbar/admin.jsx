@@ -1,5 +1,6 @@
 import {SvgIcon} from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
+import HelpIcon from '@mui/icons-material/Help';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -53,7 +54,7 @@ export const itensAdmin = [
         icone: <SettingsIcon />,
         submenu: [
           {
-            titulo: "Perfils",
+            titulo: "Perfis",
             icone: <ManageAccountsIcon />,
             caminho: '/cadastroPerfil'
           },
@@ -78,5 +79,14 @@ export const itensAdmin = [
             caminho: '/usuarios'
           }
         ]
+    },
+    {
+      titulo: 'Ajuda',
+      icone: (
+          <SvgIcon>
+              <HelpIcon/>
+          </SvgIcon>
+      ),
+      caminho: '/ajuda'
     }
 ]

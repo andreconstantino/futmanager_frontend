@@ -1,5 +1,6 @@
 import {SvgIcon} from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
+import HelpIcon from '@mui/icons-material/Help';
 import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import ViewTimelineIcon from '@mui/icons-material/ViewTimeline';
@@ -54,4 +55,13 @@ export const itensAtleta = [
         ),
         caminho: '/advertencias/' + user.atleta_id
     },
+    {
+      titulo: 'Ajuda',
+      icone: (
+          <SvgIcon>
+              <HelpIcon/>
+          </SvgIcon>
+      ),
+      caminho: '/ajuda#atleta'
+    }
 ]
