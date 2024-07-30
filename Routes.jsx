@@ -29,6 +29,7 @@ import ResponsavelViewEdit from './src/pages/ResponsavelView/ResponsavelViewEdit
 import ResponsavelListView from './src/pages/ResponsavelView/ResponsavelListView';
 import Frequencia from './src/pages/Frequencia/Frequencia';
 import Advertencias from './src/pages/Advertencias/Advertencias';
+import Ajuda from './src/pages/Ajuda/index';
 
 export default function MyRoute(){
     return(
@@ -64,6 +65,7 @@ export default function MyRoute(){
                 <Route path="/responsavelviewedit/:id" Component={ResponsavelViewEdit} />
                 <Route path="/frequencia/:id" Component={Frequencia} />
                 <Route path="/advertencias/:id" Component={Advertencias} />
+                <Route path="/ajuda" Component={Ajuda} />
             </Route>
         </Routes>
     )

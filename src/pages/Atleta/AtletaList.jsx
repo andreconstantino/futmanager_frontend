@@ -51,6 +51,7 @@ export default function AtletaList() {
   useEffect(() => {
     getCategoria();
     getAtletas();
+    console.log(perfilList);
   }, [page, pageSize]);
 
   const closeSnackBar = (event, reason) => {
@@ -65,7 +66,7 @@ export default function AtletaList() {
       navegacao(`/atletaForm/0/`+ id)
     });
   }
-
+  
   const columns = [
     { field: 'caminhoImagem', headerName: 'Foto', width: 200,
     renderCell: (params) => {
@@ -76,7 +77,8 @@ export default function AtletaList() {
         />
       );
     } },
-    { field: 'nomeCompleto', headerName: 'Nome Completo', width: 400 },
+    { field: 'nomeCompleto', headerName: 'Nome Completo', width: 300 },
+    { field: 'numAdvertencia', headerName: 'Nro. Advertencias', width: 100 },
     { field: 'nomeUniforme', headerName: 'Nome no Uniforme', width: 200 },
     { field: 'idade', headerName: 'Idade', width: 100},
     { field: 'numeroUniforme', headerName: 'Número', width: 100 },
