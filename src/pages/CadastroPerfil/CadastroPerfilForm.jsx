@@ -57,17 +57,33 @@ export default function CadastroPerfilForm() {
     const criarPerfil = (body) => {
         setLoad(true)
         post(`api/perfil`, body).then((response) => {
-            setSnackOptions(prev => ({ mensage: "Perfil criado com Sucesso", type: "success", open: true }));
-            setLoad(false)
+            setLoad(false);
+            
+            setSnackOptions(prev => (
+                { mensage: "Perfil criado com Sucesso", type: "success", open: true }
+            ));
+
+            // alert("Yasmin");
+            if('api/perfil' == true){
+                alert(response?.data?.message);
+            }
+            else{
+
+            }
+            
             setTimeout(() => {
+                // alert("AQUI");
                 navegacao('/cadastroPerfil')
             }, 3000); 
-        }).catch((erro) => {
+        })
+        .catch((erro) => {
+            alert("erro");
+
             setSnackOptions(prev => ({
                 mensage: erro?.response?.data?.message ? erro.response.data.message : erro?.message ? erro.message : 'Unespected error appears',
                 type: "error",
                 open: true
-            }));
+            }));   
             setLoad(false)
         });
     }

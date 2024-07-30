@@ -61,6 +61,7 @@ export default function CadastroCategoriaForm() {
     const criarCategoria = (body) => {
         setLoad(true)
         post(`api/categoria`, body).then((response) => {
+            alert(response);
             setSnackOptions(prev => ({ mensage: "Categoria criado com Sucesso", type: "success", open: true }));
             setLoad(false)
             setTimeout(() => {
