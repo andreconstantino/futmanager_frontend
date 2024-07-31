@@ -147,6 +147,29 @@ export default function ResponsavelForm() {
         else editarResponsavel(body)
     };
 
+    const salvarResponsavel = (event) => {
+      event.preventDefault();
+      if (responsavel.nomeCompleto.trim() === '' || responsavel.dataNascimento.trim() === '' || responsavel.cpf.trim() === '' || responsavel.rg.trim() === '') {
+     setSnackOptions(prev => ({
+       mensage: "Por favor, preencha todos os campos obrigatórios",
+       type: "error",
+       open: true
+     }));
+      } else if (isNaN(responsavel.cpf) || isNaN(responsavel.rg)) {
+     setSnackOptions(prev => ({
+       mensage: "CPF e RG devem conter apenas números",
+       type: "error",
+       open: true
+     }));
+      } else {
+     var body = {
+       ...responsavel,
+     }
+     if (id == 0) criarResponsavel(body)
+     else editarResponsavel(body)
+      }
+    };
+
     const salvarParametros = (event) => {
         const { name, value } = event.target;
         setResponsavel({
